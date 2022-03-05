@@ -1,0 +1,4 @@
+(library
+ (name todoList)
+ (public_name TodoList)
+ (libraries yojson ANSITerminal))
