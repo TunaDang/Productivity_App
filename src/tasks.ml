@@ -43,9 +43,28 @@ let rec task_names tsks =
   | { name; due_date; completed } :: t -> name :: task_names t
 
 let task_name tsks n = (List.nth tsks n).name
-let task_date tsks n = Failure "Unimplemented"
-(* match (List.nth tsks n).due_date with | None -> "This Task has no due
-   date" | Some date -> "Date" *)
+
+let months =
+  [
+    "January";
+    "February";
+    "March";
+    "April";
+    "May";
+    "June";
+    "July";
+    "August";
+    "September";
+    "October";
+    "November";
+    "December";
+  ]
+
+let task_date tsks n =
+  match (List.nth tsks n).due_date with
+  | None -> "This Task has no due date"
+  | Some { day; month } ->
+      List.nth months (month - 1) ^ string_of_int day
 
 let completed tsks n = Failure "Unimplemented"
 let tasks_amount tsks = Failure "Unimplemented"
