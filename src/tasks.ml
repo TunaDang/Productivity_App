@@ -67,4 +67,24 @@ let task_date tsks n =
 
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
-let complete tsks n = Failure "Unimplemented"
+
+(**[rec update_tasks tsks count n] equals tasks [tsks] with the [n]th
+   element's completed being true*)
+let rec update_tasks tsks count n =
+  match tsks with
+  | [] -> []
+  | { name; due_date; completed } :: t ->
+      if count = 0 then
+        begin
+          { name; due_date; completed }
+          :: update_tasks t (count + 1) n
+        end
+      else
+        begin
+          { name; due_date; completed = true }
+          :: update_tasks t (count + 1) n
+        end
+
+let complete tsks n =
+  if (List.nth tsks n).completed then raise (AlreadyComplete n)
+  else update_tasks tsks 0 n
