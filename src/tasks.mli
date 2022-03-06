@@ -18,7 +18,8 @@ val task_names : t -> string list
 
 val task_name : t -> int -> string
 (** [task_name tsks n] is the [n]th task name in tasks [tsks] Raises
-    [InvalidTask n] if [n] is not a task of tasks. *)
+    [Invalid_argument n] if [n] is negative Raise [Failure] if n is
+    greater than the amount of tasks *)
 
 val task_date : t -> int -> string
 (** [task_date tsks n] is the [n]th task date in string-like format in
