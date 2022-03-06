@@ -1,6 +1,9 @@
 exception InvalidDate of int * int
+(** Raised when an invalid date is entered*)
 exception InvalidTask of int
+(** Raised when an invalid task is encountered*)
 exception AlreadyComplete of int
+(** Raised when trying to "complete" a completed task*)
 
 type t
 (** The abstract type of values representing a tasks. *)
