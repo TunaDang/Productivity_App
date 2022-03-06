@@ -1,5 +1,4 @@
 exception InvalidDate of int * int
-exception InvalidTask of int
 exception AlreadyComplete of int
 
 type date = {
