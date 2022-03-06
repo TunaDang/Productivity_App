@@ -65,6 +65,6 @@ let task_date tsks n =
   | Some { day; month } ->
       List.nth months (month - 1) ^ string_of_int day
 
-let completed tsks n = Failure "Unimplemented"
+let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
 let complete tsks n = Failure "Unimplemented"
