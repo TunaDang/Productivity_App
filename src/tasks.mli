@@ -8,8 +8,8 @@ exception AlreadyComplete of int
 type t
 (** The abstract type of values representing a tasks. *)
 
-val add : t -> string -> int -> int -> t
-(** [add tsks str d m] is tasks [tsks] after creating a new task with
+val add : t -> ?month:int -> ?day:int -> string -> t
+(** [add tsks d m str] is tasks [tsks] after creating a new task with
     name [str], day [d], and month [m] Raises: [InvalidDate m*d] if m/d
     is not a valid date in the format month/date *)
 
