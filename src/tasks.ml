@@ -1,14 +1,15 @@
+open Date
 exception InvalidDate of int * int
 exception AlreadyComplete of int
 
-type date = {
+(* type date = {
   day : int;
-  month : int;
-}
+  month : int
+} *)
 
 type task = {
   name : string;
-  due_date : date option;
+  due_date : Date.t option;
   completed : bool;
 }
 
