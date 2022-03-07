@@ -1,5 +1,8 @@
-exception InvalidDate of int * int
-(** Raised when an invalid date is entered*)
+(** This module is a representation of a tasks*)
+
+
+exception InvalidDate of (int * int)
+(** Raised when an invalid date is entered *)
 exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
