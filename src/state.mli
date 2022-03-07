@@ -7,12 +7,15 @@ val init_state : Tasks.t -> t
 (** [init_state tsks] is the initial state of the to do list based on a
     given tasks.*)
 
-val current_tasks : t -> string list
-(** [current_tasks st] are the tasks that the user has yet completed
-    during state [st]*)
-
+(** The type representing the result of a command on a state. *)
 type result =
   | Valid of t
   | Invalid
 
-(* val complete val add val edit *)
+val update_tasks : Command.t -> t -> result
+(** [update_task cmd st] will update the current state [st] with the
+    given command [cmd]. Possible commands are add, edit, complete, and
+    quit. *)
+
+(* QUESTION: What happens when we quit? I guess we need to call the
+   persistence module*)

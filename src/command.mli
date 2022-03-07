@@ -19,13 +19,21 @@ type phrase = string list
     For Add and Edit commands, the phrase cannot be empty. *)
 
 (** Type [command] represents the user's commands. Add and edit requires
-    the user to include a phrase and date. Phrase is the description of
-    a task, which can be whatever the user inputs. The date represents
-    the deadline of the task, which is optional. *)
+    the user to include a phrase and optionally a date. Phrase is the
+    description of a task, which can be whatever the user inputs. The
+    date represents the deadline of the task, which is optional. If the
+    user wishes to include a deadline of the task, then they should
+    input the date as the last word in the command in the format
+    ["##/##"] preceded by a comma. Examples:
+
+    - ["edit    Finish the       cs   homework, 1/21"] will set the
+      deadline as 1/21.
+
+    - ["add Finish the cs homework "] does not have a deadline *)
 type t =
-  | Add of phrase * Date.t
-  | Complete of phrase * Date.t
-  | Edit of phrase * Date.t
+  | Add of phrase * Date.t option
+  | Complete of int
+  | Edit of phrase * Date.t option
   | Quit
 
 exception Malformed

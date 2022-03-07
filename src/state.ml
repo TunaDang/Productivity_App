@@ -1,9 +1,10 @@
-(* type t = { completed_tasks: uncompleted_tasks: }
+type t = { current_tasks : Tasks.t }
 
-   let init_state Tasks.t =
+let init_state (tsks : Tasks.t) : t = { current_tasks = tsks }
 
-   let current_tasks st =
+type result =
+  | Valid of t
+  | Invalid
 
-   type result = | Valid of t | Invalid
-
-   let complete = *)
+let update_tasks (cmd : Command.t) (st : t) : result =
+  failwith "Unimplemented"

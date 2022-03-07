@@ -1,4 +1,4 @@
-(** This module is a representation of a tasks*)
+(** This module is a representation of tasks*)
 
 
 exception InvalidDate of (int * int)
@@ -7,9 +7,7 @@ exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
 type t
-(** The abstract type of values representing a tasks. *)
-
-
+(** The abstract type of values representing tasks. *)
 
 val task_names : t -> string list
 (** [task_names tsks] is a list of all the task names in tasks [tsks] *)
