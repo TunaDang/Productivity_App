@@ -73,4 +73,9 @@ let num_to_month = function
   | 12 -> "Dec."
   | _ -> raise (invalid_arg "Number should be 1-12")
 
-let compare t1 t2 = Failure "Not implemented"
+let compare t1 t2 =
+  if month_num t1 < month_num t2 then -1
+  else if month_num t1 > month_num t2 then 1
+  else if day t1 < day t2 then -1
+  else if day t1 > day t2 then 1
+  else 0
