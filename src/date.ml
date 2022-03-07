@@ -79,3 +79,6 @@ let compare t1 t2 =
   else if day t1 < day t2 then -1
   else if day t1 > day t2 then 1
   else 0
+
+(**STILL NEED TODO*)
+let create_date str = { month = January; day = 1 }

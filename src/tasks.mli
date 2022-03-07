@@ -9,10 +9,7 @@ exception AlreadyComplete of int
 type t
 (** The abstract type of values representing a tasks. *)
 
-val add : t -> ?month:int -> ?day:int -> string -> t
-(** [add tsks d m str] is tasks [tsks] after creating a new task with
-    name [str], day [d], and month [m] Raises: [InvalidDate m*d] if m/d
-    is not a valid date in the format month/date *)
+
 
 val task_names : t -> string list
 (** [task_names tsks] is a list of all the task names in tasks [tsks] *)
@@ -41,3 +38,10 @@ val complete : t -> int -> t
     Raises [Invalid_argument n] if [n] is negative. 
     Raises [Failure] if n is greater than the amount of tasks.
     Raises [AlreadyComplete n] if the [n]th task is already completed. *)
+
+(**TODO*)
+(* val add : t -> ?month:int -> ?day:int -> string -> t *)
+(* val add: t -> string -> string -> t *)
+(** [add tsks d m str] is tasks [tsks] after creating a new task with
+    name [str], day [d], and month [m] Raises: [InvalidDate m*d] if m/d
+    is not a valid date in the format month/date *)
