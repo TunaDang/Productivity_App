@@ -1,4 +1,4 @@
-exception InvalidFormat of string
+exception InvalidDateFormat of string
 
 type month =
   | January
@@ -90,15 +90,15 @@ let rec trim_str_lst (str_list : string list) =
 (**[valid_date m d] is the date representation given 2 integers
    representing the month and day*)
 let valid_date m d =
-  if m > 12 || m < 1 then raise (InvalidFormat "Month Invalid")
+  if m > 12 || m < 1 then raise (InvalidDateFormat "Month Invalid")
   else if d < 1 || d > (m |> num_to_month |> days) then
-    raise (InvalidFormat "Day Invalid")
+    raise (InvalidDateFormat "Day Invalid")
   else Some { month = m |> num_to_month; day = d }
 
 let create_date str =
   let str_lst = str |> String.split_on_char '\\' |> trim_str_lst in
   if str_lst = [] then None
-  else if List.length str_lst != 2 then raise (InvalidFormat str)
+  else if List.length str_lst != 2 then raise (InvalidDateFormat str)
   else
     let month = int_of_string (List.nth str_lst 0) in
     let day = int_of_string (List.nth str_lst 1) in

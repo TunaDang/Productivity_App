@@ -44,19 +44,10 @@ let complete tsks n =
   if (List.nth tsks n).completed then raise (AlreadyComplete n)
   else complete_task_aux tsks n
 
-(****************NEED TO IMPLEMENT ADD STILL. COMMENTED AWAY FOR NOW SO
-  BUILD IS SUCCESFUL**************************)
-(** [check_date m d] is a date option with month [m] and day [d] Raises
-    [InvalidDate m,d] if month/day [m]/[d] is not a valid date*)
-(* let check_date m d = if m = 1 || m = 3 || m = 5 || m = 7 || m = 8 ||
-   m = 10 || m = 12 then if d > 31 then raise (InvalidDate (m, d)) else
-   Some { day = d; month = m } else if m = 4 || m = 6 || m = 9 || m = 11
-   then if d > 30 then raise (InvalidDate (m, d)) else Some { day = d;
-   month = m } else if m = 2 then if d > 28 then raise (InvalidDate (m,
-   d)) else Some { day = d; month = m } else raise (InvalidDate (m, d))
-
-   let add tsks ?month:(m = 0) ?day:(d = 0) str = let date = match (m,
-   d) with | 0, 0 -> None | x, y -> check_date x y in tsks @ [ { name =
-   str; due_date = date; completed = false } ] *)
-
-(* let add tsks str *)
+let add tsks input_lst =
+  {
+    name = List.nth input_lst 0;
+    due_date = Date.create_date (List.nth input_lst 1);
+    completed = false;
+  }
+  :: tsks
