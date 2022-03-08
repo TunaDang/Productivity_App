@@ -1,7 +1,7 @@
 (** This module is a representation of a Date*)
 
 exception InvalidFormat of string
-(***)
+(**Raised if an input string is invalid format*)
 
 type month =
   | January

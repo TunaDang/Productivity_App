@@ -3,8 +3,6 @@ open Date
 exception InvalidDate of (int * int)
 exception AlreadyComplete of int
 
-(* type date = { day : int; month : int } *)
-
 type task = {
   name : string;
   due_date : Date.t option;
@@ -20,10 +18,6 @@ let rec task_names tsks =
 
 let task_name tsks n = (List.nth tsks n).name
 
-(* let months = [ "January"; "February"; "March"; "April"; "May";
-   "June"; "July"; "August"; "September"; "October"; "November";
-   "December"; ] *)
-
 let task_date tsks n =
   match (List.nth tsks n).due_date with
   | None -> "This Task has no due date"
@@ -33,26 +27,22 @@ let task_date tsks n =
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
 
-(**[rec update_tasks tsks count n] equals tasks [tsks] with the [n]th
-   element's completed being true*)
-let rec update_tasks tsks count n =
-  match tsks with
-  | [] -> []
-  | { name; due_date; completed } :: t ->
-      if count = 0 then
-        begin
-          { name; due_date; completed }
-          :: update_tasks t (count + 1) n
-        end
-      else
-        begin
-          { name; due_date; completed = true }
-          :: update_tasks t (count + 1) n
-        end
+(**[rec update_tasks tsks n] equals tasks [tsks] with the [n]th
+   element's completed field being true*)
+let rec complete_task_aux tsks n =
+  let old_tsk = List.nth tsks n in
+  let new_task =
+    {
+      name = old_tsk.name;
+      due_date = old_tsk.due_date;
+      completed = true;
+    }
+  in
+  List.map (fun x -> if x == old_tsk then new_task else x) tsks
 
 let complete tsks n =
   if (List.nth tsks n).completed then raise (AlreadyComplete n)
-  else update_tasks tsks 0 n
+  else complete_task_aux tsks n
 
 (****************NEED TO IMPLEMENT ADD STILL. COMMENTED AWAY FOR NOW SO
   BUILD IS SUCCESFUL**************************)
