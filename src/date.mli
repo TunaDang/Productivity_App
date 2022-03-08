@@ -42,5 +42,8 @@ val compare : t -> t -> int
 
 val create_date : string -> t
 (** [create_date str] creates a date given a string formatted in the
-    form number/number. Raises: [InvalidFormat str] if str is not a
-    string represeting a valid date *)
+    form month/day where month is an integer between 1..12 and day is a
+    valid integer within the number of days of the month. Raises:
+    [InvalidFormat str] if str is not a string represeting a valid date.
+    Raises [EmptyString] if str is an empty string. Raises
+    [Failure "int_of_string"] if the month or day are not integers.*)

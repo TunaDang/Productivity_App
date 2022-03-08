@@ -88,20 +88,19 @@ let rec trim_str_lst (str_list : string list) =
   | "" :: t -> trim_str_lst t
   | h :: t -> h :: trim_str_lst t
 
-let is_valid_date m d = Failure "Not implemented"
+(**[valid_date m d] is the date representation given 2 integers
+   representing the month and day*)
+let valid_date m d =
+  if m > 12 || m < 1 then raise (InvalidFormat "Month Invalid")
+  else if d < 1 || d > (m |> num_to_month |> days) then
+    raise (InvalidFormat "Day Invalid")
+  else { month = m |> num_to_month; day = d }
 
-(**STILL NEED TODO*)
 let create_date str =
   let str_lst = str |> String.split_on_char '\\' |> trim_str_lst in
   if str_lst = [] then raise EmptyString
   else if List.length str_lst != 2 then raise (InvalidFormat str)
-    (* There must only be 2 elements in this list, representing
-       [month;day]*)
   else
     let month = int_of_string (List.nth str_lst 0) in
-    (*Will throw error if the input is not a number; int_of_string
-      requires number input*)
     let day = int_of_string (List.nth str_lst 1) in
-    if month > 12 || month < 1 || day < 1 || day > 31 then
-      raise (InvalidFormat str) (*Do this part in Is_valid_date*)
-    else { month = num_to_month month; day }
+    valid_date month day
