@@ -1,5 +1,4 @@
 exception InvalidFormat of string
-exception EmptyString
 
 type month =
   | January
@@ -94,11 +93,11 @@ let valid_date m d =
   if m > 12 || m < 1 then raise (InvalidFormat "Month Invalid")
   else if d < 1 || d > (m |> num_to_month |> days) then
     raise (InvalidFormat "Day Invalid")
-  else { month = m |> num_to_month; day = d }
+  else Some { month = m |> num_to_month; day = d }
 
 let create_date str =
   let str_lst = str |> String.split_on_char '\\' |> trim_str_lst in
-  if str_lst = [] then raise EmptyString
+  if str_lst = [] then None
   else if List.length str_lst != 2 then raise (InvalidFormat str)
   else
     let month = int_of_string (List.nth str_lst 0) in

@@ -3,9 +3,6 @@
 exception InvalidFormat of string
 (***)
 
-exception EmptyString
-(** *)
-
 type month =
   | January
   | February
@@ -40,10 +37,11 @@ val compare : t -> t -> int
 (**[compare d1 d2] is -1 if [d1] is calendrically before [d2], 1 if [d1]
    is calendrically after [d2], and 0 if [d1] and [d2] are the same date *)
 
-val create_date : string -> t
-(** [create_date str] creates a date given a string formatted in the
-    form month/day where month is an integer between 1..12 and day is a
-    valid integer within the number of days of the month. Raises:
-    [InvalidFormat str] if str is not a string represeting a valid date.
-    Raises [EmptyString] if str is an empty string. Raises
-    [Failure "int_of_string"] if the month or day are not integers.*)
+val create_date : string -> t option
+(** [create_date str] creates an optional date given a string formatted
+    in the form month/day where month is an integer between 1..12 and
+    day is a valid integer within the number of days of the month. If
+    [str] is empty, [None] is returned, else [Some] date is returned
+    Raises: [InvalidFormat str] if str is not a string represeting a
+    valid date. Raises[Failure "int_of_string"] if the month or day are
+    not integers.*)
