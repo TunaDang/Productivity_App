@@ -1,6 +1,24 @@
 (** This module is a representation of a Date*)
 
 exception InvalidFormat of string
+(***)
+
+exception EmptyString
+(** *)
+
+type month =
+  | January
+  | February
+  | March
+  | April
+  | May
+  | June
+  | July
+  | August
+  | September
+  | October
+  | November
+  | December
 
 type t
 (** The abstract type of values representing a date *)
@@ -14,7 +32,7 @@ val day : t -> int
 val month_num : t -> int
 (**[month_num d] is the number corresponding to the month of date [d]*)
 
-val num_to_month : int -> string
+val num_to_month : int -> month
 (**[num_to_month n] is the month abbreivation corresponding to number
    [n] Requires: [n] is in 1..12 *)
 
