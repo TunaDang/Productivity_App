@@ -1,4 +1,5 @@
 open OUnit2
+<<<<<<< HEAD
 open TodoList
 open Date
 open Tasks
@@ -20,11 +21,15 @@ let create_date_test (name : string) (str : string) (expected : string)
   name >:: fun _ ->
   assert_equal expected
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
+=======
+open Command
+>>>>>>> cc9be0be6fa72f437b177845229a3c345942ec69
 
 let date_tests = []
 let tasks_tests = []
 
 let suite =
-  "test suite for A2" >::: List.flatten [ date_tests; tasks_tests ]
+  "Test suite for everything"
+  >::: List.flatten [ Command.command_suite; date_tests; tasks_tests ]
 
 let _ = run_test_tt_main suite
