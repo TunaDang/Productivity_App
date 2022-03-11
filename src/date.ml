@@ -103,3 +103,6 @@ let create_date str =
     let month = int_of_string (List.nth str_lst 0) in
     let day = int_of_string (List.nth str_lst 1) in
     valid_date month day
+
+let to_string date =
+  string_of_int (month_num date) ^ "/" ^ string_of_int (day date)

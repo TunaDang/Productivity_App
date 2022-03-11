@@ -45,3 +45,6 @@ val create_date : string -> t option
     Raises: [InvalidDateFormat str] if str is not a string represeting a
     valid date. Raises[Failure "int_of_string"] if the month or day are
     not integers.*)
+
+val to_string : t -> string
+(** [to_string date] converts [date] to a month/day format*)
