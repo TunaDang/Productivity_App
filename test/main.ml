@@ -13,7 +13,8 @@ let create_date_helper (date_opt : Date.t option) : Date.t =
 
 (** [create_date_test] tests the creation of a date given an input
     string and the conversion of a date back a readable string Tests
-    Date.create_date and Date.string*)
+    [Date.create_date] and [Date.string]. Will also test [Date.day] and
+    [Date.month_num] as those functions are called in [Date.to_string]*)
 let create_date_test (name : string) (str : string) (expected : string)
     : test =
   name >:: fun _ ->
