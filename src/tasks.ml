@@ -23,8 +23,20 @@ let from_file file =
   let json = Yojson.Basic.from_file file in
   json |> to_list |> List.map task_of_json
 
-(* To be implemented *)
-(* let to_file file t = Yojson.Basic.to_file file t *)
+let format tsk =
+  let { name; due_date; completed } = tsk in
+  `Assoc
+    [
+      ("name", `String name);
+      ( "due_date",
+        match due_date with
+        | None -> `String ""
+        | Some date -> `String (Date.to_string date) );
+      ("completed", `Bool completed);
+    ]
+
+let to_file file tsks =
+  Yojson.Basic.to_file file (`List (List.map format tsks))
 
 let rec task_names tsks =
   match tsks with

@@ -3,7 +3,9 @@ open TodoList
 open Tasks
 open Date
 
+(* JSON TESTS *)
 let sample_tasks = Tasks.from_file "src/data/sample.json"
+let test_write = to_file "src/data/write_test.json" sample_tasks
 
 (* DATE TESTS*)
 
