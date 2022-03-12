@@ -3,24 +3,38 @@ open TodoList
 open Date
 open Tasks
 
-(* Date tests *)
+(* DATE TESTS*)
 
-(**[create_date_helper] exracts the date from a date option*)
+(**[create_date_helper date_opt] extracts the date from a date option*)
 let create_date_helper (date_opt : Date.t option) : Date.t =
   match date_opt with
   | None -> failwith "Invalid input"
   | Some date -> date
 
-(** [create_date_test] tests the creation of a date given an input
-    string and the conversion of a date back a readable string Tests
-    [Date.create_date] and [Date.string]. Will also test [Date.day] and
-    [Date.month_num] as those functions are called in [Date.to_string]*)
 let create_date_test (name : string) (str : string) (expected : string)
     : test =
   name >:: fun _ ->
   assert_equal expected
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
     ~printer:String.escaped
+
+let abbrv_name_test (name : string) (str : string) (expected : string) :
+    test =
+  name >:: fun _ ->
+  assert_equal expected
+    (str |> Date.create_date |> create_date_helper |> Date.abbrv_name)
+    ~printer:String.escaped
+
+let compare_test
+    (name : string)
+    (d1 : string)
+    (d2 : string)
+    (expected : int) =
+  name >:: fun _ ->
+  assert_equal expected
+    (compare
+       (d1 |> Date.create_date |> create_date_helper)
+       (d2 |> Date.create_date |> create_date_helper))
 
 let date_tests =
   [
@@ -37,6 +51,13 @@ let date_tests =
     ( "non int input exc" >:: fun _ ->
       assert_raises (Failure "int_of_string") (fun () ->
           Date.create_date "apple/2") );
+    abbrv_name_test "January" "1/3" "Jan.";
+    abbrv_name_test "December" "12/3" "Dec.";
+    compare_test "earlier month" "1/1" "2/1" ~-1;
+    compare_test "later month" "3/1" "2/1" 1;
+    compare_test "same date" "3/1" "3/1" 0;
+    compare_test "later day" "3/2" "3/1" 1;
+    compare_test "earlier day" "3/2" "3/3" ~-1;
   ]
 
 let tasks_tests = []
