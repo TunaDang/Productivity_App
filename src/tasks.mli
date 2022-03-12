@@ -41,8 +41,6 @@ val complete : t -> int -> t
     n is greater than the amount of tasks. Raises [AlreadyComplete n] if
     the [n]th task is already completed. *)
 
-(* val add: t -> string -> string -> t *)
-
 val add : t -> string -> Date.t -> t
 (** [add tsks lsts] is tasks [tsks] after creating a new task with name
     being the first element of [lsts] and the date being created from

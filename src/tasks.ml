@@ -35,9 +35,8 @@ let task_name tsks n = (List.nth tsks n).name
 
 let task_date tsks n =
   match (List.nth tsks n).due_date with
-  | None -> "This Task has no due date"
-  | Some date ->
-      Date.abbrv_name date ^ " " ^ (Date.day date |> string_of_int)
+  | None -> ""
+  | Some date -> Date.to_string date
 
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks

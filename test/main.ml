@@ -1,11 +1,9 @@
 open OUnit2
 open TodoList
 open Tasks
-
 open Date
-(**[create_date_helper] extracts the date from a date option*)
-(* Date tests *)
-let sample_tasks = from_file "src/data/sample.json"
+
+let sample_tasks = Tasks.from_file "src/data/sample.json"
 
 (* DATE TESTS*)
 
@@ -40,6 +38,62 @@ let compare_test
        (d1 |> Date.create_date |> create_date_helper)
        (d2 |> Date.create_date |> create_date_helper))
 
+(*TASKS TESTS*)
+
+let task_names_test
+    (name : string)
+    (input_t : Tasks.t)
+    (expected : string list) : test =
+  failwith "not impl"
+
+let task_name_test
+    (name : string)
+    (input_t : Tasks.t)
+    (input_int : int)
+    (expected : string) : test =
+  failwith "not impl"
+
+let task_date_test
+    (name : string)
+    (input_t : Tasks.t)
+    (input_int : int)
+    (expected : string) : test =
+  failwith "not impl"
+
+let completed_test
+    (name : string)
+    (input_t : Tasks.t)
+    (input_int : int)
+    (expected : bool) : test =
+  failwith "not impl"
+
+let tasks_amount_test
+    (name : string)
+    (input_t : Tasks.t)
+    (expected : int) : test =
+  failwith "not impl"
+
+(*[complete_test_aux input_t] returns the completed value of the [n]th
+  task of [input_t]*)
+let complete_test_aux (input_t : Tasks.t) (n : int) : bool =
+  Tasks.completed input_t n
+
+let complete_test
+    (name : string)
+    (input_t : Tasks.t)
+    (input_int : int)
+    (expected : bool) : test =
+  failwith "not impl"
+
+(*TODO STILL: What should expected be?*)
+let add_test
+    (name : string)
+    (input_t : Tasks.t)
+    (input_name : string)
+    (input_date : string)
+    (expected : string) : test =
+  failwith "not impl"
+
 let date_tests =
   [
     create_date_test "Basic test" "1/2" "1/2";
@@ -68,10 +122,7 @@ let tasks_tests =
   [
     ( {|Rooms from "ho plaza" is
       ["Ho Plaza"; "northeast"; "north east"]|}
-    >:: fun _ ->
-      assert_equal "Buy Milk"
-        (task_name sample_tasks 0)
-  );
+    >:: fun _ -> assert_equal "Buy Milk" (task_name sample_tasks 0) );
   ]
 
 let suite =
