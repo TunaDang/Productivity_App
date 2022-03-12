@@ -23,7 +23,7 @@ let from_file file =
   let json = Yojson.Basic.from_file file in
   json |> to_list |> List.map task_of_json
 
-(* To be impolemented *)
+(* To be implemented *)
 (* let to_file file t = Yojson.Basic.to_file file t *)
 
 let rec task_names tsks =

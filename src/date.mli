@@ -3,7 +3,7 @@
 exception InvalidDateFormat of string
 (**Raised if an input string is invalid format*)
 
-type month =
+(* type month =
   | January
   | February
   | March
@@ -15,7 +15,7 @@ type month =
   | September
   | October
   | November
-  | December
+  | December *)
 
 type t
 (** The abstract type of values representing a date *)
@@ -29,7 +29,7 @@ val day : t -> int
 val month_num : t -> int
 (**[month_num d] is the number corresponding to the month of date [d]*)
 
-val num_to_month : int -> month
+(* val num_to_month : int -> month *)
 (**[num_to_month n] is the month abbreivation corresponding to number
    [n] Requires: [n] is in 1..12 *)
 

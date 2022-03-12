@@ -43,6 +43,8 @@ let abbrv_name t =
 
 let day t = t.day
 
+(**[num_to_month n] is the month abbreivation corresponding to number
+   [n] Requires: [n] is in 1..12 *)
 let month_num t =
   match t.month with
   | January -> 1
