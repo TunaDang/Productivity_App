@@ -22,14 +22,23 @@ let create_date_test (name : string) (str : string) (expected : string)
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
     ~printer:String.escaped
 
-(*TODO: Add test cases for create_date_test Make sure to add tests for
-  if InvalidFormat being raised, not date input, Failure
-  "int_of_string"*)
-let date_tests = [ 
-  create_date_test "Basic test" "1/2" "1/2";
-  create_date_test "Another basic test" "12/12" "12/12";
-  
+let date_tests =
+  [
+    create_date_test "Basic test" "1/2" "1/2";
+    create_date_test "Feb edge" "2/28" "2/28";
+    create_date_test "Jan edge" "3/31" "3/31";
+    create_date_test "April edge" "4/30" "4/30";
+    ( "InvalidDateFormat day" >:: fun _ ->
+      assert_raises (InvalidDateFormat "2/29") (fun () ->
+          Date.create_date "2/29") );
+    ( "InvalidDateFormat month" >:: fun _ ->
+      assert_raises (InvalidDateFormat "13/2") (fun () ->
+          Date.create_date "13/2") );
+    ( "non int input exc" >:: fun _ ->
+      assert_raises (Failure "int_of_string") (fun () ->
+          Date.create_date "apple/2") );
   ]
+
 let tasks_tests = []
 
 let suite =

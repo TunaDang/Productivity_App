@@ -90,9 +90,10 @@ let rec trim_str_lst (str_list : string list) =
 (**[valid_date m d] is the date representation given 2 integers
    representing the month and day*)
 let valid_date m d =
-  if m > 12 || m < 1 then raise (InvalidDateFormat "Month Invalid")
+  if m > 12 || m < 1 then
+    raise (InvalidDateFormat (string_of_int m ^ "/" ^ string_of_int d))
   else if d < 1 || d > (m |> num_to_month |> days) then
-    raise (InvalidDateFormat "Day Invalid")
+    raise (InvalidDateFormat (string_of_int m ^ "/" ^ string_of_int d))
   else Some { month = m |> num_to_month; day = d }
 
 let create_date str =
