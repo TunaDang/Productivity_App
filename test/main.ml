@@ -25,7 +25,11 @@ let create_date_test (name : string) (str : string) (expected : string)
 (*TODO: Add test cases for create_date_test Make sure to add tests for
   if InvalidFormat being raised, not date input, Failure
   "int_of_string"*)
-let date_tests = []
+let date_tests = [ 
+  create_date_test "Basic test" "1/2" "1/2";
+  create_date_test "Another basic test" "12/12" "12/12";
+  
+  ]
 let tasks_tests = []
 
 let suite =

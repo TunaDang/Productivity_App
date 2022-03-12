@@ -38,7 +38,7 @@ val complete : t -> int -> t
 
 (* val add: t -> string -> string -> t *)
 
-val add : t -> string list -> t
+val add : t -> string -> Date.t -> t
 (** [add tsks lsts] is tasks [tsks] after creating a new task with name
     being the first element of [lsts] and the date being created from
     the second element of [lsts]. Raises: [InvalidDateFormat str] the
