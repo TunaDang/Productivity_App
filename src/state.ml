@@ -7,4 +7,8 @@ type result =
   | Invalid
 
 let update_tasks (cmd : Command.t) (st : t) : result =
-  failwith "Unimplemented"
+  match cmd with
+  | Add (phrase, date) -> Tasks.add t.current_tasks phrase date
+  | Complete task -> Tasks.complete t.current_tasks task
+  | Edit (phrase, date) -> Tasks.edit t.current_tasks phrase date
+  | Quit -> Tasks.quit

@@ -1,7 +1,6 @@
 open OUnit2
 open TodoList
 open Command
-open Date
 
 let parse_test
     (name : string)
@@ -12,25 +11,19 @@ let parse_test
 let parse_add_tests =
   [
     parse_test "Add TEST 1: Parsing the add command"
-      (Add
-         ( [ "Complete"; "CS"; "homework" ],
-           Some (Date.create_date "1/2") ))
+      (Add ([ "Complete"; "CS"; "homework" ], Date.create_date "1/2"))
       "add Complete CS homework 1/2";
     parse_test
       "Command TEST 8: Parsing the add command with spaces in the \
        command"
-      (Add
-         ( [ "Complete"; "CS"; "homework" ],
-           Some (Date.create_date "11/23") ))
+      (Add ([ "Complete"; "CS"; "homework" ], Date.create_date "11/23"))
       "add             Complete        CS       homework    11/23      ";
   ]
 
 let parse_edit_tests =
   [
     parse_test "Edit TEST 1: Parsing the edit command"
-      (Edit
-         ( [ "Complete"; "CS"; "homework" ],
-           Some (Date.create_date "2/1") ))
+      (Edit ([ "Complete"; "CS"; "homework" ], Date.create_date "2/1"))
       "edit Complete CS homework 2/1";
   ]
 

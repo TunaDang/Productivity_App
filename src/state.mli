@@ -17,5 +17,8 @@ val update_tasks : Command.t -> t -> result
     given command [cmd]. Possible commands are add, edit, complete, and
     quit. *)
 
+val current_tasks : t -> string list
+(** [current_tasks st] is the list of all task names in the state [st]*)
+
 (* QUESTION: What happens when we quit? I guess we need to call the
    persistence module*)
