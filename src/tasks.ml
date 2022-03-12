@@ -45,9 +45,4 @@ let complete tsks n =
   else complete_task_aux tsks n
 
 let add tsks tsk_name date =
-  {
-    name = tsk_name;
-    due_date = date;
-    completed = false;
-  }
-  :: tsks
+  { name = tsk_name; due_date = Some date; completed = false } :: tsks
