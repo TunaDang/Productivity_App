@@ -44,10 +44,5 @@ let complete tsks n =
   if (List.nth tsks n).completed then raise (AlreadyComplete n)
   else complete_task_aux tsks n
 
-let add tsks input_lst =
-  {
-    name = List.nth input_lst 0;
-    due_date = Date.create_date (List.nth input_lst 1);
-    completed = false;
-  }
-  :: tsks
+let add tsks tsk_name date =
+  { name = tsk_name; due_date = Some date; completed = false } :: tsks
