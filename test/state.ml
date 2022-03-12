@@ -1,9 +1,6 @@
 open OUnit2
 open TodoList
 
-let initial_empty state =
-  State.init_state (Tasks.add "Hello" (Date.create_date "1/2"))
-
 (* We will test by checking the names of the tasks inputed as a
    string. *)
 let state_test

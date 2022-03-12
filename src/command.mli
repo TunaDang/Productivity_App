@@ -43,10 +43,13 @@ exception Malformed
 exception Empty
 (** Raised when an empty command is inputed.*)
 
+exception Invalid
+(** Raised when an invalid command argument is inputed.*)
+
 val parse : string -> t
 (** [parse str] parses the user's input into a [command]. The first word
     of the command is the verb, and the last word represents the date,
-    which is separated by a "/".
+    which is separated by a ".".
 
     Requires: [str] contains only alphanumeric (A-Z, a-z, 0-9) and space
     characters and /, (only ASCII character code 32; not tabs or
@@ -57,3 +60,9 @@ val parse : string -> t
 
     Raises; [Malformed] if the verb is not one of Add, Edit, Complete,
     Save, or Quit. *)
+
+val get_phrase : t -> string
+(** [get_phrase cmd] only works on Add and Edit and it is the name of
+    the to do list item that the user specifies as a string.
+
+    Raises: [Invalid] if [cmd] is not Add or Edit *)

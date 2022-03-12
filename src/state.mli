@@ -7,12 +7,7 @@ val init_state : Tasks.t -> t
 (** [init_state tsks] is the initial state of the to do list based on a
     given tasks.*)
 
-(** The type representing the result of a command on a state. *)
-type result =
-  | Valid of t
-  | Invalid
-
-val update_tasks : Command.t -> t -> result
+val update_tasks : Command.t -> t -> t
 (** [update_task cmd st] will update the current state [st] with the
     given command [cmd]. Possible commands are add, edit, complete, and
     quit. *)
