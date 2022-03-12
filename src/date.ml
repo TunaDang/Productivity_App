@@ -96,7 +96,7 @@ let valid_date m d =
   else Some { month = m |> num_to_month; day = d }
 
 let create_date str =
-  let str_lst = str |> String.split_on_char '\\' |> trim_str_lst in
+  let str_lst = str |> String.split_on_char '/' |> trim_str_lst in
   if str_lst = [] then None
   else if List.length str_lst != 2 then raise (InvalidDateFormat str)
   else

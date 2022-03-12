@@ -20,7 +20,11 @@ let create_date_test (name : string) (str : string) (expected : string)
   name >:: fun _ ->
   assert_equal expected
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
+    ~printer:String.escaped
 
+(*TODO: Add test cases for create_date_test Make sure to add tests for
+  if InvalidFormat being raised, not date input, Failure
+  "int_of_string"*)
 let date_tests = []
 let tasks_tests = []
 
