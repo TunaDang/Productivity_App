@@ -1,4 +1,5 @@
 open Date
+open Yojson.Basic.Util
 
 exception InvalidDate of (int * int)
 exception AlreadyComplete of int
@@ -10,6 +11,20 @@ type task = {
 }
 
 type t = task list
+
+let task_of_json json =
+  {
+    name = json |> member "name" |> to_string;
+    due_date = json |> member "due_date" |> to_string |> create_date;
+    completed = json |> member "completed" |> to_bool;
+  }
+
+let from_file file =
+  let json = Yojson.Basic.from_file file in
+  json |> to_list |> List.map task_of_json
+
+(* To be impolemented *)
+(* let to_file file t = Yojson.Basic.to_file file t *)
 
 let rec task_names tsks =
   match tsks with

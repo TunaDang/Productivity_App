@@ -1,11 +1,12 @@
 open OUnit2
 open TodoList
-open Date
 open Tasks
 
+open Date
+(**[create_date_helper] extracts the date from a date option*)
 (* Date tests *)
+let sample_tasks = from_file "src/data/sample.json"
 
-(**[create_date_helper] exracts the date from a date option*)
 let create_date_helper (date_opt : Date.t option) : Date.t =
   match date_opt with
   | None -> failwith "Invalid input"
@@ -39,7 +40,15 @@ let date_tests =
           Date.create_date "apple/2") );
   ]
 
-let tasks_tests = []
+let tasks_tests =
+  [
+    ( {|Rooms from "ho plaza" is
+      ["Ho Plaza"; "northeast"; "north east"]|}
+    >:: fun _ ->
+      assert_equal "Buy Milk"
+        (task_name sample_tasks 0)
+  );
+  ]
 
 let suite =
   "test suite for A2" >::: List.flatten [ date_tests; tasks_tests ]

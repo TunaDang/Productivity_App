@@ -9,6 +9,11 @@ exception AlreadyComplete of int
 type t
 (** The abstract type of values representing a tasks. *)
 
+val from_file : string -> t
+(** [from_file file] are the tasks parsed from JSON file [file]*)
+
+(* val to_file : string -> Yojson.Basic.t -> unit *)
+
 val task_names : t -> string list
 (** [task_names tsks] is a list of all the task names in tasks [tsks] *)
 
