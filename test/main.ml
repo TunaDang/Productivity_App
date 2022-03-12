@@ -44,55 +44,73 @@ let task_names_test
     (name : string)
     (input_t : Tasks.t)
     (expected : string list) : test =
-  failwith "not impl"
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.task_names input_t)
+    ~printer:(String.concat " ")
 
 let task_name_test
     (name : string)
     (input_t : Tasks.t)
     (input_int : int)
     (expected : string) : test =
-  failwith "not impl"
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.task_name input_t input_int)
+    ~printer:String.escaped
 
 let task_date_test
     (name : string)
     (input_t : Tasks.t)
     (input_int : int)
     (expected : string) : test =
-  failwith "not impl"
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.task_date input_t input_int)
+    ~printer:String.escaped
 
 let completed_test
     (name : string)
     (input_t : Tasks.t)
     (input_int : int)
     (expected : bool) : test =
-  failwith "not impl"
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.completed input_t input_int)
+    ~printer:string_of_bool
 
 let tasks_amount_test
     (name : string)
     (input_t : Tasks.t)
     (expected : int) : test =
-  failwith "not impl"
-
-(*[complete_test_aux input_t] returns the completed value of the [n]th
-  task of [input_t]*)
-let complete_test_aux (input_t : Tasks.t) (n : int) : bool =
-  Tasks.completed input_t n
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.tasks_amount input_t)
+    ~printer:string_of_int
 
 let complete_test
     (name : string)
     (input_t : Tasks.t)
     (input_int : int)
     (expected : bool) : test =
-  failwith "not impl"
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.completed (Tasks.complete input_t input_int) input_int)
+    ~printer:string_of_bool
 
-(*TODO STILL: What should expected be?*)
+(* Check new tasks by checking against take name list*)
 let add_test
     (name : string)
     (input_t : Tasks.t)
     (input_name : string)
     (input_date : string)
-    (expected : string) : test =
-  failwith "not impl"
+    (expected : string list) : test =
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.add input_t input_name
+       (input_date |> Date.create_date |> create_date_helper)
+    |> Tasks.task_names)
+    ~printer:(String.concat " ")
 
 let date_tests =
   [
@@ -120,9 +138,24 @@ let date_tests =
 
 let tasks_tests =
   [
-    ( {|Rooms from "ho plaza" is
-      ["Ho Plaza"; "northeast"; "north east"]|}
-    >:: fun _ -> assert_equal "Buy Milk" (task_name sample_tasks 0) );
+    task_names_test "sample tasks test" sample_tasks
+      [ "Buy Milk"; "A3"; "Get that bread" ];
+    task_name_test "get 1st task name from sample tasks" sample_tasks 0
+      "Buy Milk";
+    task_name_test "get 3rd task name from sample tasks" sample_tasks 2
+      "Get that bread";
+    task_date_test "get 2nd task date from sample tasks" sample_tasks 1
+      "3/23";
+    completed_test "get 1st task completed status from sample tasks"
+      sample_tasks 0 true;
+    tasks_amount_test "sample tasks amount" sample_tasks 3;
+    complete_test "complete 2nd task from sample tasks" sample_tasks 1
+      true;
+    ( "Already Complete task" >:: fun _ ->
+      assert_raises (AlreadyComplete 0) (fun () ->
+          Tasks.complete sample_tasks 0) );
+    add_test "Add new task" sample_tasks "Finish testing" "3/13"
+      [ "Finish testing"; "Buy Milk"; "A3"; "Get that bread" ];
   ]
 
 let suite =
