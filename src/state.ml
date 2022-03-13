@@ -7,5 +7,5 @@ let update_tasks (cmd : Command.t) (st : t) = failwith "Unimplemented"
    Edit (phrase, date) -> Tasks.edit t.current_tasks phrase date | Quit
    -> Tasks.quit *)
 
-let current_tasks (tasks : t) = [ "hello" ]
-(* failwith "Unimplemented" *)
+let get_tasks (tasks : t) = Tasks.task_name tasks.current_tasks
+let get_dates (tasks : t) = [ "" ]
