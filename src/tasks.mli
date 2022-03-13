@@ -9,6 +9,12 @@ exception AlreadyComplete of int
 type t
 (** The abstract type of values representing tasks. *)
 
+val from_file : string -> t
+(** [from_file file] are the tasks parsed from JSON file [file]*)
+
+val to_file : string -> t -> unit
+(** [to_file file tsks] stores tasks [tsks] in JSON file [file]*)
+
 val task_names : t -> string list
 (** [task_names tsks] is a list of all the task names in tasks [tsks] *)
 
@@ -36,9 +42,7 @@ val complete : t -> int -> t
     n is greater than the amount of tasks. Raises [AlreadyComplete n] if
     the [n]th task is already completed. *)
 
-(* val add: t -> string -> string -> t *)
-
-val add : t -> string -> Date.t -> t
+val add : t -> string -> Date.t option -> t
 (** [add tsks lsts] is tasks [tsks] after creating a new task with name
     being the first element of [lsts] and the date being created from
     the second element of [lsts]. Raises: [InvalidDateFormat str] the
