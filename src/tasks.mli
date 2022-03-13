@@ -23,8 +23,9 @@ val task_name : t -> int -> string
     [Invalid_argument n] if [n] is negative Raise [Failure] if n is
     greater than the amount of tasks *)
 
-val task_dates: t -> string list
-(***)
+val task_dates : t -> string list
+(**[task_dates tsks] is a string list representing the dates of the
+   tasks in [tsks]*)
 
 val task_date : t -> int -> string
 (** [task_date tsks n] is the [n]th task date in string-like format in
