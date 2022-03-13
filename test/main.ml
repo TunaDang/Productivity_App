@@ -110,7 +110,7 @@ let add_test
   name >:: fun _ ->
   assert_equal expected
     (Tasks.add input_t input_name
-       (input_date |> Date.create_date |> create_date_helper)
+       (Some (input_date |> Date.create_date |> create_date_helper))
     |> Tasks.task_names)
     ~printer:(String.concat " ")
 
@@ -156,8 +156,8 @@ let tasks_tests =
     ( "Already Complete task" >:: fun _ ->
       assert_raises (AlreadyComplete 0) (fun () ->
           Tasks.complete sample_tasks 0) );
-    add_test "Add new task" sample_tasks "Finish testing" "3/13"
-      [ "Finish testing"; "Buy Milk"; "A3"; "Get that bread" ];
+    add_test "Add new task" sample_tasks "Finish testing" "3/25"
+      [ "Buy Milk"; "A3"; "Finish testing"; "Get that bread" ];
   ]
 
 let suite =
