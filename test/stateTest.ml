@@ -1,8 +1,6 @@
 open OUnit2
 open TodoList
 
-(* We will test by checking the names of the tasks inputed as a
-   string. *)
 let state_test
     (name : string)
     (expected_output : string list)
@@ -10,7 +8,7 @@ let state_test
     (input_state : State.t) =
   name >:: fun _ ->
   assert_equal expected_output
-    (State.current_tasks (State.update_tasks input_cmd input_state))
+    (State.get_tasks (State.update_tasks input_cmd input_state))
 
 let state_add_tests =
   [
