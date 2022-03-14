@@ -19,6 +19,6 @@ val get_dates : t -> string list
 (** [current_tasks_dates st] is the string list of all dates of state
     [st].*)
 
-val write_state : string -> unit
+val write_state : string -> t -> unit
 (** [write_state file_name st] will write the current state [st] to a
     JSON file with name [file_name].*)
