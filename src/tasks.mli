@@ -9,6 +9,9 @@ exception AlreadyComplete of int
 type t
 (** The abstract type of values representing a tasks. *)
 
+val empty : unit -> t
+(** [empty] returns an empty task list*)
+
 val from_file : string -> t
 (** [from_file file] are the tasks parsed from JSON file [file]*)
 

@@ -12,6 +12,8 @@ type task = {
 
 type t = task list
 
+let empty () = []
+
 let task_of_json json =
   {
     name = json |> member "name" |> to_string;
