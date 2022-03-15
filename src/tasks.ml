@@ -87,7 +87,8 @@ let rec add tsks tsk_name date =
     match tsks with
     | [] -> [ new_task ]
     | h :: t ->
-        if
+        if h.due_date = None then new_task :: h :: t
+        else if
           Date.compare
             (extract_date_helper date)
             (extract_date_helper h.due_date)
