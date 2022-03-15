@@ -69,6 +69,15 @@ let complete_test
     (Tasks.completed (Tasks.complete input_t input_int) input_int)
     ~printer:string_of_bool
 
+let task_dates_test
+    (name : string)
+    (input_t : Tasks.t)
+    (expected : string list) : test =
+  name >:: fun _ ->
+  assert_equal expected
+    (Tasks.task_dates input_t)
+    ~printer:(String.concat " ")
+
 (* Check new tasks by checking against take name list*)
 let add_test
     (name : string)
@@ -103,6 +112,8 @@ let tasks_tests =
           Tasks.complete sample_tasks 0) );
     add_test "Add new task" sample_tasks "Finish testing" "3/25"
       [ "Buy Milk"; "A3"; "Finish testing"; "Get that bread" ];
+    task_dates_test "sample data dates" sample_tasks
+      [ "3/15"; "3/23"; "4/20" ];
   ]
 
 let suite = tasks_tests

@@ -1,4 +1,4 @@
-(** This module is a representation of a tasks*)
+(** This module is a representation of tasks*)
 
 exception InvalidDate of (int * int)
 (** Raised when an invalid date is entered *)
@@ -7,7 +7,7 @@ exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
 type t
-(** The abstract type of values representing a tasks. *)
+(** The abstract type of values representing tasks. *)
 
 val empty : unit -> t
 (** [empty] returns an empty task list*)
@@ -25,6 +25,10 @@ val task_name : t -> int -> string
 (** [task_name tsks n] is the [n]th task name in tasks [tsks] Raises
     [Invalid_argument n] if [n] is negative Raise [Failure] if n is
     greater than the amount of tasks *)
+
+val task_dates : t -> string list
+(**[task_dates tsks] is a string list representing the dates of the
+   tasks in [tsks]*)
 
 val task_date : t -> int -> string
 (** [task_date tsks n] is the [n]th task date in string-like format in
