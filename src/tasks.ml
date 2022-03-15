@@ -109,6 +109,4 @@ let rec task_dates tsks =
   match tsks with
   | [] -> []
   | { name; due_date; completed } :: t ->
-      if due_date != None then
-        (due_date |> date_opt_to_str) :: task_dates t
-      else task_dates t
+      (due_date |> date_opt_to_str) :: task_dates t
