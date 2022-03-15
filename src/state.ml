@@ -9,6 +9,7 @@ let update_tasks (st : t) (cmd : Command.t) =
       |> pack_state
   | Complete task -> Tasks.complete st.current_tasks task |> pack_state
   | Edit (phrase, date) -> failwith "Unsupported"
+  | Help -> failwith "Unsupported"
   | Quit -> failwith "Unsupported"
 
 let get_tasks (tasks : t) = Tasks.task_names tasks.current_tasks

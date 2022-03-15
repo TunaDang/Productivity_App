@@ -4,6 +4,7 @@ type t =
   | Add of phrase * Date.t option
   | Complete of int
   | Edit of phrase * Date.t option
+  | Help
   | Quit
 
 exception Empty
@@ -43,6 +44,8 @@ let parse_command phrase date =
   | "complete" -> (
       try Complete (rest |> get_first |> int_of_string)
       with _ -> raise Malformed)
+  | "help" ->
+      if trimmed_date = "" && rest = [] then Help else raise Malformed
   | "quit" ->
       if trimmed_date = "" && rest = [] then Quit else raise Malformed
   | _ -> raise Malformed
