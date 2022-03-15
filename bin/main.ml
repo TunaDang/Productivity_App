@@ -4,43 +4,57 @@ exception Exit
 
 let todo_file = "data" ^ Filename.dir_sep ^ "todolist.json"
 
-let get_command () =
+let rec get_command () =
   Output.input ();
   (* > character for input*)
   match Command.parse (read_line ()) with
-  | Command.Empty ->
+  | exception Command.Empty ->
       Output.empty ();
       get_command ()
-  | Command.Malformed ->
+  | exception Command.Malformed ->
       Output.malformed ();
+      get_command ()
+  | Help ->
+      Output.help ();
       get_command ()
   | x -> x
 
-let evaluate state command =
+let rec evaluate state command =
   match command with
   | Command.Quit ->
-      Output.quit;
+      Output.quit ();
       exit 0
-  | Command.Add | Command.Complete -> State.update_tasks state command
+  | Command.Add (_, _) | Command.Complete _ ->
+      State.update_tasks state command
+  | Edit (_, _) -> failwith "unsupported"
+  | Help -> failwith "Help should not end up here"
 
 let repl state =
   while true do
-    let command = get_command in
+    let command = get_command () in
     let state = evaluate state command in
-    State.write_state todo_file;
+    State.write_state todo_file state;
     Output.print_tasks state
   done
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   let open TodoList in
-  ANSITerminal.print_string [ ANSITerminal.red ]
+  let open ANSITerminal in
+  (*RIGHT NOW THESE LINES GET OVERWRITTEN*)
+  erase Screen;
+  move_cursor 1 1;
+  print_string [ ANSITerminal.red ]
     "\n\nWelcome to The Ocaml Todo List.\n";
   let tasks =
-    try Tasks.from_file todo_file with e -> Tasks.empty ()
+    try Tasks.from_file todo_file
+    with e ->
+      ignore (open_out todo_file);
+      Tasks.empty ()
   in
   (* create new file if none exists*)
   let state = State.pack_state tasks in
+  Output.print_tasks state;
   repl state
 
 (* Execute the game engine. *)
