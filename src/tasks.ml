@@ -70,10 +70,10 @@ let complete tsks n =
   if (List.nth tsks n).completed then raise (AlreadyComplete n)
   else complete_task_aux tsks n
 
-(** extract date from date option*)
+(**Extracts date from date option*)
 let extract_date_helper (date_opt : Date.t option) : Date.t =
   match date_opt with
-  | None -> failwith "No Due Date"
+  | None -> failwith "Invalid input"
   | Some date -> date
 
 let rec add tsks tsk_name date =
@@ -97,11 +97,16 @@ let rec add tsks tsk_name date =
         then new_task :: h :: t
         else h :: add t tsk_name date
 
+(** extract date from date option and converts to stign format*)
+let date_opt_to_str date_opt =
+  match date_opt with
+  | None -> ""
+  | Some date -> Date.to_string date
+
 let rec task_dates tsks =
   match tsks with
   | [] -> []
   | { name; due_date; completed } :: t ->
       if due_date != None then
-        (due_date |> extract_date_helper |> Date.to_string)
-        :: task_dates t
+        (due_date |> date_opt_to_str) :: task_dates t
       else task_dates t
