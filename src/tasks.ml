@@ -93,10 +93,12 @@ let rec add tsks tsk_name date =
             (extract_date_helper date)
             (extract_date_helper h.due_date)
           = ~-1
-          || Date.compare
-               (extract_date_helper date)
-               (extract_date_helper h.due_date)
-             = 0
+        then new_task :: h :: t
+        else if
+          Date.compare
+            (extract_date_helper date)
+            (extract_date_helper h.due_date)
+          = 0
         then new_task :: h :: t
         else h :: add t tsk_name date
 
