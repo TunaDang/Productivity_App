@@ -22,3 +22,6 @@ val get_dates : t -> string list
 val write_state : string -> t -> unit
 (** [write_state file_name st] will write the current state [st] to a
     JSON file with name [file_name].*)
+
+val clear_state : t -> t
+(** [clear_state st] will reset the state [st] of the calendar. *)
