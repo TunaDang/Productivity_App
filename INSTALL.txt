@@ -1,0 +1,9 @@
+After cloning our reposity you should install the necesarry opam packages:
+opam install ANSITerminal
+opam install yojson
+
+After installing those packages, you can build our project by running:
+make build
+
+After building, you can launch our application by writing:
+make start 
