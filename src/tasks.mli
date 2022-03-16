@@ -6,6 +6,8 @@ exception InvalidDate of (int * int)
 exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
+exception ElementOutofBounds of int 
+
 type t
 (** The abstract type of values representing tasks. *)
 

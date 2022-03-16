@@ -3,6 +3,7 @@ open Yojson.Basic.Util
 
 exception InvalidDate of (int * int)
 exception AlreadyComplete of int
+exception ElementOutofBounds of int
 
 type task = {
   name : string;
@@ -69,8 +70,10 @@ let rec complete_task_aux tsks n =
   List.map (fun x -> if x == old_tsk then new_task else x) tsks
 
 let complete tsks n =
-  if (List.nth tsks n).completed then raise (AlreadyComplete n)
-  else complete_task_aux tsks n
+  try
+    if (List.nth tsks n).completed then raise (AlreadyComplete n)
+    else complete_task_aux tsks n
+  with Failure x -> raise (ElementOutofBounds n)
 
 (**Extracts date from date option*)
 let extract_date_helper (date_opt : Date.t option) : Date.t =
