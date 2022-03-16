@@ -1,9 +1,6 @@
 type t = { current_tasks : Tasks.t }
 
-let pack_state (tsks : Tasks.t) : t =
-  print_int (Tasks.tasks_amount tsks);
-  { current_tasks = tsks }
-
+let pack_state (tsks : Tasks.t) : t = { current_tasks = tsks }
 let clear_state () = pack_state (Tasks.empty ())
 
 let update_tasks (st : t) (cmd : Command.t) =
@@ -11,7 +8,9 @@ let update_tasks (st : t) (cmd : Command.t) =
   | Add (phrase, date) ->
       Tasks.add st.current_tasks (Command.get_phrase cmd) date
       |> pack_state
-  | Complete task -> Tasks.complete st.current_tasks task |> pack_state
+  | Complete task -> (
+      try Tasks.complete st.current_tasks task |> pack_state
+      with Tasks.ElementOutofBounds n -> st)
   | Edit (phrase, date) -> failwith "Unsupported"
   | Clear -> clear_state ()
   | Help -> failwith "Unsupported"

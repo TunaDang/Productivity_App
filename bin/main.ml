@@ -30,13 +30,12 @@ let evaluate state command =
   | Edit (_, _) -> failwith "unsupported"
   | Help -> failwith "Help should not end up here"
 
-let repl state =
-  while true do
-    let command = get_command () in
-    let state = evaluate state command in
-    State.write_state todo_file state;
-    Output.print_tasks state
-  done
+let rec repl state =
+  let command = get_command () in
+  let state = evaluate state command in
+  State.write_state todo_file state;
+  Output.print_tasks state;
+  repl state
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
