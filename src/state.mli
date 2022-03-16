@@ -12,7 +12,7 @@ val update_tasks : t -> Command.t -> t
     given command [cmd]. Possible commands are add, edit, complete, and
     quit. *)
 
-val get_tasks : t -> string list
+val get_task_names : t -> string list
 (** [current_tasks st] is the list of all task names in the state [st].*)
 
 val get_dates : t -> string list
@@ -22,3 +22,5 @@ val get_dates : t -> string list
 val write_state : string -> t -> unit
 (** [write_state file_name st] will write the current state [st] to a
     JSON file with name [file_name].*)
+
+val get_tasks : t -> Tasks.t

@@ -34,32 +34,42 @@ let no_date_format = "%d. %s"
 let date_format = "%d. %s [%s] - <> days remaining"
 
 (* helper function to format a single task into the right output*)
-let format_task i task =
-  let i = i + 1 in
+let format_task tasks i =
   (*to display starting at 1*)
-  let name = fst task in
-  let date = snd task in
+  (*TODO: factor this out into different functions based on complete or
+    date*)
+  let name = Tasks.task_name tasks i in
+  let date = Tasks.task_date tasks i in
+  let complete = Tasks.completed tasks i in
+  let i = i + 1 in
+  let star = if complete then "( * )" else "(   )" in
   let output =
-    if date = "" then Printf.sprintf "%d. %s" i name
-    else Printf.sprintf "%d. %s [%s] - <> days remaining" i name date
+    if date = "" then Printf.sprintf "%s   %d. %s" star i name
+    else
+      Printf.sprintf "%s   %d. %s [%s] - <> days remaining" star i name
+        date
   in
-  output
+  (output, complete)
 
 let print_ascii_art () =
   ANSITerminal.print_string [ ANSITerminal.yellow ] ascii_art
 
+(* Helper function to get a range list*)
+let rec range i j = if i > j then [] else i :: range (i + 1) j
+
 let print_tasks st =
   let open ANSITerminal in
   let tasks = State.get_tasks st in
-  let dates = State.get_dates st in
-  print_int (List.length tasks);
-  print_int (List.length dates);
-  let tasks_dates = pack_string_list tasks dates in
-  let lines = List.mapi format_task tasks_dates in
+  let length = Tasks.tasks_amount tasks in
+  let lines = List.map (format_task tasks) (range 0 (length - 1)) in
   erase Screen;
   set_cursor 1 1;
   print_ascii_art ();
-  List.iter (fun str -> print_endline str) lines;
+  List.iter
+    (fun (str, c) ->
+      if c then print_string [ ANSITerminal.Bold ] (str ^ "\n")
+      else print_endline str)
+    lines;
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
 
