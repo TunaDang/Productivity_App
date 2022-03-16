@@ -46,6 +46,12 @@ let parse_quit_test =
     parse_test "Quit TEST 2: Parsing quit with a period" Quit "quit.";
   ]
 
+let parse_clear_test =
+  [
+    parse_test "Clear TEST 1: Parsing the clear command" Clear "clear";
+    parse_test "Clear TEST 2: Parsing the clear command" Clear "clear.";
+  ]
+
 let get_phrase_test
     (name : string)
     (expected_output : string)
@@ -107,6 +113,14 @@ let assertion_tests =
     >:: fun _ ->
       assert_raises Invalid (fun () ->
           "quit" |> Command.parse |> Command.get_phrase) );
+    ( "Assertion TEST 9: Assert get phrase raises Invalid for clear"
+    >:: fun _ ->
+      assert_raises Invalid (fun () ->
+          "clear" |> Command.parse |> Command.get_phrase) );
+    ( "Assertion TEST 10: Assert get phrase raises Malformed for clear \
+       with extra stuff"
+    >:: fun _ ->
+      assert_raises Malformed (fun () -> Command.parse "clear stuff") );
   ]
 
 let suite =

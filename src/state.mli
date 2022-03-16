@@ -24,3 +24,7 @@ val write_state : string -> t -> unit
     JSON file with name [file_name].*)
 
 val get_tasks : t -> Tasks.t
+(** [get_tasks st] will get the Tasks.t for state [st]*)
+
+val clear_state : unit -> t
+(** [clear_state st] will reset the state [st] of the calendar. *)

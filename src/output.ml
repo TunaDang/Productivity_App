@@ -1,13 +1,6 @@
 (* art from https://www.asciiart.eu/animals/camels and
    https://patorjk.com/software/taag/#p=display&f=Standard&t=OCaml%20TodoList *)
 
-(* TODO: Print should display correctly for completed tasks. make
-   something like () or (*) and completed is bold *)*)
-
-(* Tasks with and without dates should print correctly. And
-   differently! *)
-(* numbers should start at 1, not 0. This means must subtract 1 from the
-   number the user enters*)
 (* End of file should exit gracefully*)
 
 let ascii_art =
@@ -80,4 +73,12 @@ let empty () = print_endline "Empty input. Please re-enter valid entry."
 let malformed () =
   print_endline "Malformed input. Please re-enter valid entry."
 
-let help () = print_endline "help menu"
+let help () =
+  print_endline
+    "Ocaml_Todo_List is a terminal-based productivity application that \
+     utilizes ASCII art to display your goals in a pretty and fun way: \n\
+     * To add a task to your todo list type the following in the \
+     command line: “add [task_name]. (optional) [date]”. Note: the \
+     period is required. \n\
+     * To mark a task completed, type “complete [index]”\n\
+     * To leave the todo list, type: “quit”."

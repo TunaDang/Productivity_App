@@ -34,6 +34,7 @@ type t =
   | Add of phrase * Date.t option
   | Complete of int
   | Edit of phrase * Date.t option
+  | Clear
   | Help
   | Quit
 

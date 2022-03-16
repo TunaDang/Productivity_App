@@ -19,12 +19,12 @@ let rec get_command () =
       get_command ()
   | x -> x
 
-let rec evaluate state command =
+let evaluate state command =
   match command with
   | Command.Quit ->
       Output.quit ();
       exit 0
-  | Command.Add (_, _) -> State.update_tasks state command
+  | Command.Add (_, _) | Clear -> State.update_tasks state command
   | Command.Complete i ->
       State.update_tasks state (Command.Complete (i - 1))
   | Edit (_, _) -> failwith "unsupported"
