@@ -81,4 +81,5 @@ let help () =
      command line: “add [task_name]. (optional) [date]”. Note: the \
      period is required. \n\
      * To mark a task completed, type “complete [index]”\n\
+     * To clear the list, type 'clear'\n\
      * To leave the todo list, type: “quit”."
