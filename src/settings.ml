@@ -1,12 +1,12 @@
 open Yojson.Basic.Util
 open Date
 
-exception InvalidOption
+exception InvalidDate of (int * int)
 exception ElementOutofBounds of int
 
 type t = {
   display_completed : bool;
-  items_due_before : Date.t;
+  due_before : Date.t option;
 }
 (* unimplemented color_palate : Color *)
 
@@ -34,3 +34,6 @@ let rec settings sets = ()
 
 let setting sets n = ()
 (* (List.nth sets n).name *)
+
+let set_display_completed = ()
+let set_due_before = ()
