@@ -17,9 +17,11 @@ let pack_state (tsks : Tasks.t) (settings : Settings.t) (page : page) :
   }
 
 let clear_state () =
-  pack_state (Tasks.empty ())
-    (Settings.from_file "../data/settings.json")
-    Main
+  {
+    current_tasks = Tasks.empty ();
+    current_settings = Settings.from_file "data/settings.json";
+    current_page = Main;
+  }
 
 let update_state (st : t) (cmd : Command.t) =
   match cmd with
@@ -36,11 +38,6 @@ let update_state (st : t) (cmd : Command.t) =
   | Edit (phrase, date) -> failwith "Unsupported"
   | Clear -> clear_state ()
   | Settings -> pack_state st.current_tasks st.current_settings Settings
-  | Select setting_id -> st
-  | Date date ->
-      pack_state st.current_tasks
-        (Settings.set_due_before st.current_settings date)
-        Settings
   | Help -> failwith "Unsupported"
   | Quit -> failwith "Unsupported"
 

@@ -60,25 +60,6 @@ let parse_settings_test =
       Settings "settings.";
   ]
 
-let parse_select_test =
-  [
-    parse_test "Select TEST 1: Parsing a regular number" (Select 1) "1";
-    parse_test "Select TEST 2: Parsing a regular two digit number"
-      (Select 29457394852) "29457394852";
-    parse_test "Select TEST 3: Parsing a regular number with spaces"
-      (Select 123) "         123";
-  ]
-
-let parse_date_test =
-  [
-    parse_test "Parse date TEST 1: Parsing a regular date"
-      (Date (Date.create_date "1/2"))
-      "1/2";
-    parse_test "Parse date TEST 2: Parsing a different date"
-      (Date (Date.create_date "3/30"))
-      "3/30";
-  ]
-
 let get_phrase_test
     (name : string)
     (expected_output : string)
@@ -152,18 +133,6 @@ let assertion_tests =
       "Assertion TEST 10: Assert raises Malformed for clear with extra \
        stuff"
       Malformed "clear stuff";
-    assertion_test
-      "Assertion TEST 11: Assert select raises Malformed for multiple \
-       numbers"
-      Malformed "1 2 3 4";
-    assertion_test
-      "Assertion TEST 12: Assert date raises invalid date for an \
-       invalid date"
-      (Date.InvalidDateFormat "4/40") "4/40";
-    assertion_test
-      "Assertion TEST 13: Assert select raises Malformed for different \
-       dates"
-      (Date.InvalidDateFormat "4/40/404/04") "4/40/404/04";
   ]
 
 let suite =
@@ -174,6 +143,5 @@ let suite =
       parse_quit_test;
       get_phrase_tests;
       parse_settings_test;
-      parse_date_test;
       assertion_tests;
     ]

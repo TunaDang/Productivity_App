@@ -31,5 +31,4 @@ let settings_test =
       sample_settings 0 "display_completed";
   ]
 
-let toggle_display_completed_test = []
-let suite = List.flatten []
+let suite = List.flatten [ settings_test ]

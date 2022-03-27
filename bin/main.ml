@@ -24,9 +24,9 @@ let evaluate state command =
   | Command.Quit ->
       Output.quit ();
       exit 0
-  | Command.Add (_, _) | Clear -> State.update_tasks state command
+  | Command.Add (_, _) | Clear -> State.update_state state command
   | Command.Complete i ->
-      State.update_tasks state (Command.Complete (i - 1))
+      State.update_state state (Command.Complete (i - 1))
   | Edit (_, _) -> failwith "unsupported"
   | Help -> failwith "Help should not end up here"
 

@@ -6,8 +6,6 @@ type t =
   | Edit of phrase * Date.t option
   | Clear
   | Settings
-  | Select of int
-  | Date of Date.t option
   | Help
   | Quit
 
@@ -50,8 +48,9 @@ let parse_command phrase date =
       with _ -> raise Malformed)
   | "clear" ->
       if trimmed_date == "" && rest = [] then Clear else raise Malformed
-  | "setting" ->
-      if trimmed_date = "" && rest = [] then Help else raise Malformed
+  | "settings" ->
+      if trimmed_date = "" && rest = [] then Settings
+      else raise Malformed
   | "help" ->
       if trimmed_date = "" && rest = [] then Help else raise Malformed
   | "quit" ->

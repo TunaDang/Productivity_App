@@ -36,8 +36,6 @@ type t =
   | Edit of phrase * Date.t option
   | Clear
   | Settings
-  | Select of int
-  | Date of Date.t option
   | Help
   | Quit
 

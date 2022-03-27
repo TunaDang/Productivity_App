@@ -79,10 +79,10 @@ let state_add_dates_tests =
     state_test_dates "State Dates TEST 1: Empty state" [] empty_state;
     state_test_dates "State Dates TEST 2: Adding one item" [ "1/1" ]
       adding_one_item;
-    state_test_dates "State Dates TEST 3: Adding two items"
+    state_test_dates "State Dates TEST 3: Adding two\n       items"
       [ "1/1"; "1/2" ] adding_two_item;
     state_test_dates
-      "State Dates TEST 4: Clearing after adding two items" []
+      "State\n       Dates TEST 4: Clearing after adding two items" []
       clearing_state;
   ]
 
