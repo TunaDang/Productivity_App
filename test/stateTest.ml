@@ -48,14 +48,14 @@ let state_test_dates
   assert_equal expected_output (State.get_dates input_state)
 
 (* initializing an empty state *)
-let empty_state = State.pack_state (Tasks.empty ())
+let empty_state = State.clear_state ()
 
 let adding_one_item =
-  State.update_tasks empty_state
+  State.update_state empty_state
     ("add Finish my homework. 1/1" |> Command.parse)
 
 let adding_two_item =
-  State.update_tasks adding_one_item
+  State.update_state adding_one_item
     ("add Complete my hw. 1/2" |> Command.parse)
 
 let clearing_state = State.clear_state ()
