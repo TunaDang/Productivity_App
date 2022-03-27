@@ -41,3 +41,8 @@ val to_string : t -> string
 val date_diff : t -> t -> int
 (**[date_diff d1 d2] is the days between date [d1] and date [d2] if [d1]
    comes calendrically before [d2]. Equals -1 if [d1] comes after [d2]*)
+
+val days_remaining : t -> int
+(** [days_remaning date] is the days left between the current time and
+    the date provided. Returns 0 if today is the due date and -1 if the
+    due date has passed*)

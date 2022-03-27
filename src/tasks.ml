@@ -48,11 +48,12 @@ let rec task_names tsks =
 
 let task_name tsks n = (List.nth tsks n).name
 
-let task_date tsks n =
+let task_date_str tsks n =
   match (List.nth tsks n).due_date with
   | None -> ""
   | Some date -> Date.to_string date
 
+let task_date_opt tsks n = (List.nth tsks n).due_date
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
 

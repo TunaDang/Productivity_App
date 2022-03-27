@@ -37,7 +37,7 @@ let task_date_test
     (expected : string) : test =
   name >:: fun _ ->
   assert_equal expected
-    (Tasks.task_date input_t input_int)
+    (Tasks.task_date_str input_t input_int)
     ~printer:String.escaped
 
 let completed_test

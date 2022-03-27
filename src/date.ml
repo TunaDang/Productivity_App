@@ -128,3 +128,17 @@ let date_diff d1 d2 =
     in
     let days_in_m2 = d2.day in
     days_left_in_m1 + days_in_months_bw + days_in_m2
+
+let days_remaining date =
+  let open Unix in
+  let time = time () |> localtime in
+  match time with
+  | { tm_mday; tm_mon } ->
+      let current_date =
+        match
+          create_date (Printf.sprintf "%d/%d" (tm_mon + 1) tm_mday)
+        with
+        | Some x -> x
+        | None -> failwith "current date must be a valid date"
+      in
+      date_diff current_date date

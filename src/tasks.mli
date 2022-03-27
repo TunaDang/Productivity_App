@@ -6,7 +6,7 @@ exception InvalidDate of (int * int)
 exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
-exception ElementOutofBounds of int 
+exception ElementOutofBounds of int
 
 type t
 (** The abstract type of values representing tasks. *)
@@ -32,9 +32,14 @@ val task_dates : t -> string list
 (**[task_dates tsks] is a string list representing the dates of the
    tasks in [tsks]*)
 
-val task_date : t -> int -> string
-(** [task_date tsks n] is the [n]th task date in string-like format in
-    tasks [tsks] Raises[Invalid_argument n] if [n] is negative. Raise
+val task_date_str : t -> int -> string
+(** [task_date_str tsks n] is the [n]th task date in string-like format
+    in tasks [tsks] Raises[Invalid_argument n] if [n] is negative. Raise
+    [Failure] if n is greater than the amount of tasks*)
+
+val task_date_opt : t -> int -> Date.t option
+(** [task_date_opt tsks n] is the [n]th task date optional in tasks
+    [tsks] Raises[Invalid_argument n] if [n] is negative. Raise
     [Failure] if n is greater than the amount of tasks*)
 
 val completed : t -> int -> bool
