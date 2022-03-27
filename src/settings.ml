@@ -11,11 +11,10 @@ type t = {
 (* unimplemented color_palate : Color *)
 
 let setting_of_json json =
+  let str = json |> member "due_before" |> Yojson.Basic.to_string in
   {
     display_completed = json |> member "display_completed" |> to_bool;
-    due_before =
-      json |> member "due_before" |> Yojson.Basic.to_string
-      |> create_date;
+    due_before = create_date (String.sub str 1 (String.length str - 2));
   }
 
 let from_file file = Yojson.Basic.from_file file |> setting_of_json

@@ -4,7 +4,7 @@ open Tasks
 open Date
 
 (* JSON TESTS *)
-let sample_tasks = Tasks.from_file "test/data/sample.json"
+let sample_tasks = Tasks.from_file "test/data/sample_tasks.json"
 let test_write = to_file "test/data/write_test.json" sample_tasks
 
 (* DATE TESTS*)
