@@ -33,8 +33,10 @@ let format tsk =
 
 let to_file file sets = Yojson.Basic.to_file file (format sets)
 let rec settings sets = [ "display_completed"; "due_before" ]
-let setting sets n = failwith "unimplemented"
-(* (List.nth sets n).name *)
+let setting sets n = List.nth (settings sets) n
 
-let set_display_completed = failwith "unimplemented"
-let set_due_before = failwith "unimplemented"
+let set_display_completed sets b =
+  { display_completed = b; due_before = sets.due_before }
+
+let set_due_before sets d =
+  { display_completed = sets.display_completed; due_before = d }
