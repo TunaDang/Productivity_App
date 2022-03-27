@@ -1,7 +1,7 @@
 open Date
 open Yojson.Basic.Util
 
-exception InvalidDate of string
+exception InvalidDate
 exception AlreadyComplete of int
 exception ElementOutofBounds of int
 
@@ -56,8 +56,8 @@ let task_date tsks n =
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
 
-(**[rec update_tasks tsks n] equals tasks [tsks] with the [n]th
-   element's completed field being true*)
+(*[rec update_tasks tsks n] equals [tsks] with the [n]th element's
+  completed field being true*)
 let rec complete_task_aux tsks n =
   let old_tsk = List.nth tsks n in
   let new_task =
@@ -75,10 +75,11 @@ let complete tsks n =
     else complete_task_aux tsks n
   with Failure x -> raise (ElementOutofBounds n)
 
-(**Extracts date from date option*)
-let extract_date_helper (date_opt : Date.t option) : Date.t =
+(*[extract_date_helper date_opt] xxtracts date from date option
+  [date_opt]*)
+let extract_date_helper date_opt : Date.t =
   match date_opt with
-  | None -> raise (InvalidDate "")
+  | None -> raise InvalidDate
   | Some date -> date
 
 let rec add tsks tsk_name date =
@@ -105,7 +106,8 @@ let rec add tsks tsk_name date =
         then new_task :: h :: t
         else h :: add t tsk_name date
 
-(** extract date from date option and converts to stign format*)
+(* [date_opt_to_str d_opt] extract date from date option, [date_opt] and
+   converts to string format*)
 let date_opt_to_str date_opt =
   match date_opt with
   | None -> ""
