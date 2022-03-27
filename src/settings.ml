@@ -10,25 +10,29 @@ type t = {
 }
 (* unimplemented color_palate : Color *)
 
-let setting_of_json json = ()
-(* unimplemented { name = json |> member "name" |> to_string; due_date =
-   json |> member "due_date" |> to_string |> create_date; completed =
-   json |> member "completed" |> to_bool; } *)
+let setting_of_json json =
+  {
+    display_completed = json |> member "display_completed" |> to_bool;
+    due_before =
+      json |> member "due_before" |> Yojson.Basic.to_string
+      |> create_date;
+  }
 
-let from_file file = failwith "unimpl"
-(* let json = Yojson.Basic.from_file file in json |> to_list |> List.map
-   setting_of_json *)
+let from_file file = Yojson.Basic.from_file file |> setting_of_json
 
-let format tsk = ()
-(* let { name; due_date; completed } = tsk in `Assoc [ ("name", `String
-   name); ( "due_date", match due_date with | None -> `String "" | Some
-   date -> `String (Date.to_string date) ); ("completed", `Bool
-   completed); ] *)
+let format tsk =
+  let { display_completed; due_before } = tsk in
+  `Assoc
+    [
+      ("name", `Bool display_completed);
+      ( "due_before",
+        match due_before with
+        | None -> `String ""
+        | Some date -> `String (Date.to_string date) );
+    ]
 
-let to_file file sets = failwith "unimpl"
-(* Yojson.Basic.to_file file (`List (List.map format sets)) *)
-
-let rec settings sets = failwith "unimpl"
+let to_file file sets = Yojson.Basic.to_file file (format sets)
+let rec settings sets = ()
 (* match sets with | [] -> [] | { name; due_date; completed } :: t ->
    name :: setting_names t *)
 
