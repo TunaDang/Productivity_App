@@ -1,6 +1,6 @@
 (** This module is a representation of tasks*)
 
-exception InvalidDate of (int * int)
+exception InvalidDate of string
 (** Raised when an invalid date is entered *)
 
 exception AlreadyComplete of int
@@ -54,6 +54,6 @@ val complete : t -> int -> t
 val add : t -> string -> Date.t option -> t
 (** [add tsks lsts] is tasks [tsks] after creating a new task with name
     being the first element of [lsts] and the date being created from
-    the second element of [lsts]. Raises: [InvalidDateFormat str] the
+    the second element of [lsts]. Raises: [InvalidDate str] the
     second element of [lsts] Requires: [lsts] is a string list that
     contains exactly 2 elements*)

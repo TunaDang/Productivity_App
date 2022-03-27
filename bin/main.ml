@@ -2,7 +2,7 @@ open TodoList
 
 exception Exit
 
-let todo_file = "data" ^ Filename.dir_sep ^ "todolist.json"
+(* let todo_file = "data" ^ Filename.dir_sep ^ "todolist.json" *)
 
 let rec get_command () =
   Output.input ();
@@ -30,12 +30,12 @@ let evaluate state command =
   | Edit (_, _) -> failwith "unsupported"
   | Help -> failwith "Help should not end up here"
 
-let rec repl state =
+let rec repl state file =
   let command = get_command () in
   let state = evaluate state command in
-  State.write_state todo_file state;
+  State.write_state file state;
   Output.print_tasks state;
-  repl state
+  repl state file
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
@@ -46,16 +46,21 @@ let main () =
   move_cursor 1 1;
   print_string [ ANSITerminal.red ]
     "\n\nWelcome to The Ocaml Todo List.\n";
-  let tasks =
-    try Tasks.from_file todo_file
-    with e ->
-      ignore (open_out todo_file);
-      Tasks.empty ()
-  in
-  (* create new file if none exists*)
-  let state = State.pack_state tasks in
-  Output.print_tasks state;
-  repl state
+  print_endline "What todo list would you like to open";
+  match read_line () with
+  | exception End_of_file -> ()
+  | file ->
+      let todo_file = "data" ^ Filename.dir_sep ^ file ^ ".json" in
+      let tasks =
+        try Tasks.from_file todo_file
+        with e ->
+          ignore (open_out todo_file);
+          Tasks.empty ()
+      in
+      (* create new file if none exists*)
+      let state = State.pack_state tasks in
+      Output.print_tasks state;
+      repl state todo_file
 
 (* Execute the game engine. *)
 let () = main ()

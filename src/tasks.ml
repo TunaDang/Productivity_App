@@ -1,7 +1,7 @@
 open Date
 open Yojson.Basic.Util
 
-exception InvalidDate of (int * int)
+exception InvalidDate of string
 exception AlreadyComplete of int
 exception ElementOutofBounds of int
 
@@ -78,7 +78,7 @@ let complete tsks n =
 (**Extracts date from date option*)
 let extract_date_helper (date_opt : Date.t option) : Date.t =
   match date_opt with
-  | None -> failwith "Invalid input"
+  | None -> raise (InvalidDate "")
   | Some date -> date
 
 let rec add tsks tsk_name date =
