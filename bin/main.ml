@@ -47,6 +47,7 @@ let main () =
   print_string [ ANSITerminal.red ]
     "\n\nWelcome to The Ocaml Todo List.\n";
   print_endline "What todo list would you like to open";
+  print_string [ ANSITerminal.Bold ] "> ";
   match read_line () with
   | exception End_of_file -> ()
   | file ->
