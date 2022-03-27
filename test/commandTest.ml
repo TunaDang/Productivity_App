@@ -60,6 +60,89 @@ let parse_settings_test =
       Settings "settings.";
   ]
 
+let settings_cmd_test
+    (name : string)
+    (expected_sets_cmd : Command.setting_t)
+    input_sets_cmd =
+  name >:: fun _ ->
+  assert_equal expected_sets_cmd (Command.parse_settings input_sets_cmd)
+
+let toggle_command_tests =
+  [
+    settings_cmd_test "Toggle TEST 1: Testing turning things on"
+      (Toggle true) "toggle on";
+    settings_cmd_test "Toggle TEST 2: Testing turning things off"
+      (Toggle false) "toggle off";
+    settings_cmd_test
+      "Toggle TEST 3: Testing turning things on with spaces"
+      (Toggle true) "      toggle        on";
+    settings_cmd_test
+      "Toggle TEST 4: Testing turning things off with spaces"
+      (Toggle false) "      toggle        off   ";
+  ]
+
+let parsing_date_tests =
+  [
+    settings_cmd_test "Date_parse TEST 1: Testing valid date"
+      (Date (Date.create_date "1/1"))
+      "date 1/1";
+    settings_cmd_test "Date_parse TEST 2: Testing another valid date"
+      (Date (Date.create_date "12/11"))
+      "date  12/11";
+    settings_cmd_test
+      "Date_parse TEST 3: Testing another valid date with spaces in \
+       the phrase"
+      (Date (Date.create_date "12/11"))
+      "   date       12/11        ";
+    settings_cmd_test "Date_parse TEST 4: Testing date with no date"
+      (Date (Date.create_date ""))
+      "   date         ";
+  ]
+
+let parse_exit_test =
+  [
+    settings_cmd_test "Exit TEST 1: Parsing the exit command" Exit
+      "exit";
+    settings_cmd_test
+      "Exit TEST 2: Parsing the exit command with spaces" Exit
+      "      exit       ";
+  ]
+
+let assertion_sets_test (name : string) expected_exception input_command
+    =
+  name >:: fun _ ->
+  assert_raises expected_exception (fun () ->
+      Command.parse_settings input_command)
+
+let assertion_sets_tests =
+  [
+    assertion_sets_test
+      "Settings cmd assertion TEST 1: Just the word toggle will be \
+       malformed"
+      Malformed "toggle";
+    assertion_sets_test
+      "Settings cmd assertion TEST 2: toggle with other phrases is \
+       malformed"
+      Malformed "toggle hello";
+    assertion_sets_test
+      "Settings cmd assertion TEST 3: toggle with other phrases with \
+       spaces is malformed"
+      Malformed "     toggle  what      is going    on";
+    assertion_sets_test
+      "Settings cmd assertion TEST 4: empty phrase raises empty" Empty
+      "";
+    assertion_sets_test
+      "Settings cmd assertion TEST 5: spaces raise empty" Empty
+      "         ";
+    assertion_sets_test
+      "Settings cmd assertion TEST 6: invalid date raises Invalid"
+      Invalid "date 6/40";
+    assertion_sets_test
+      "Settings cmd assertion TEST 7: Incorrect format of date raises \
+       Invalid"
+      Invalid " date  1     /3      0      ";
+  ]
+
 let get_phrase_test
     (name : string)
     (expected_output : string)
@@ -144,4 +227,8 @@ let suite =
       get_phrase_tests;
       parse_settings_test;
       assertion_tests;
+      toggle_command_tests;
+      assertion_sets_tests;
+      parsing_date_tests;
+      parse_exit_test;
     ]

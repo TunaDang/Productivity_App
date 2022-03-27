@@ -60,6 +60,26 @@ let adding_two_item =
 
 let clearing_state = State.clear_state ()
 
+let going_to_settings_menu =
+  State.update_state clearing_state ("settings" |> Command.parse)
+
+let exiting_menu =
+  State.update_settings_state going_to_settings_menu
+    ("exit" |> Command.parse_settings)
+
+let state_page_tests =
+  [
+    ( "Page state TEST 1: testing that current page of the state \
+       changes after apply settings command"
+    >:: fun _ ->
+      assert_equal State.Settings
+        (State.current_page going_to_settings_menu) );
+    ( "Page state TEST 2: Testing that current page of the state \
+       changes after exiting the settings menu"
+    >:: fun _ ->
+      assert_equal State.Settings (State.current_page exiting_menu) );
+  ]
+
 let state_add_tasks_tests =
   [
     state_test_tasks "State Tasks TEST 1: Empty state" [] empty_state;

@@ -41,9 +41,22 @@ let update_state (st : t) (cmd : Command.t) =
   | Help -> failwith "Unsupported"
   | Quit -> failwith "Unsupported"
 
+let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
+  match settings_cmd with
+  | Toggle on_off ->
+      pack_state st.current_tasks
+        (Settings.set_display_completed st.current_settings on_off)
+        Settings
+  | Date date ->
+      pack_state st.current_tasks
+        (Settings.set_due_before st.current_settings date)
+        Settings
+  | Exit -> pack_state st.current_tasks st.current_settings Main
+
 let get_task_names (tasks : t) = Tasks.task_names tasks.current_tasks
 let get_dates (tasks : t) = Tasks.task_dates tasks.current_tasks
 let get_tasks state = state.current_tasks
+let current_page st = st.current_page
 
 let write_state (file_name : string) (st : t) =
   Tasks.to_file file_name st.current_tasks

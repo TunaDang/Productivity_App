@@ -1,5 +1,10 @@
 type phrase = string list
 
+type setting_t =
+  | Toggle of bool
+  | Date of Date.t option
+  | Exit
+
 type t =
   | Add of phrase * Date.t option
   | Complete of int
@@ -13,7 +18,6 @@ exception Empty
 exception Malformed
 exception Invalid
 
-(* Helper functions *)
 let is_empty str = String.trim str = ""
 
 let convert_to_array (str : string) =
@@ -57,7 +61,6 @@ let parse_command phrase date =
       if trimmed_date = "" && rest = [] then Quit else raise Malformed
   | _ -> raise Malformed
 
-(* Interface Functions*)
 let parse str =
   if is_empty str then raise Empty
   else
@@ -66,6 +69,27 @@ let parse str =
     | [ phrase; date ] -> parse_command phrase date
     | [ phrase ] -> parse_command phrase ""
     | _ -> raise Malformed
+
+let parse_settings str =
+  if is_empty str then raise Empty
+  else
+    let phrase = convert_to_array str in
+    let rest = get_rest phrase in
+    match get_first phrase with
+    | "toggle" -> (
+        match rest with
+        | [ "on" ] -> Toggle true
+        | [ "off" ] -> Toggle false
+        | _ -> raise Malformed)
+    | "date" -> (
+        try
+          if rest == [] then Date None
+          else
+            let date_string = get_first rest in
+            Date (Date.create_date date_string)
+        with _ -> raise Invalid)
+    | "exit" -> if rest = [] then Exit else raise Malformed
+    | _ -> raise Invalid
 
 let get_phrase t =
   match t with
