@@ -24,7 +24,7 @@ let format tsk =
   let { display_completed; due_before } = tsk in
   `Assoc
     [
-      ("name", `Bool display_completed);
+      ("display_completed", `Bool display_completed);
       ( "due_before",
         match due_before with
         | None -> `String ""
@@ -32,12 +32,9 @@ let format tsk =
     ]
 
 let to_file file sets = Yojson.Basic.to_file file (format sets)
-let rec settings sets = ()
-(* match sets with | [] -> [] | { name; due_date; completed } :: t ->
-   name :: setting_names t *)
-
-let setting sets n = failwith "unimpl"
+let rec settings sets = [ "display_completed"; "due_before" ]
+let setting sets n = failwith "unimplemented"
 (* (List.nth sets n).name *)
 
-let set_display_completed = ()
-let set_due_before = ()
+let set_display_completed = failwith "unimplemented"
+let set_due_before = failwith "unimplemented"
