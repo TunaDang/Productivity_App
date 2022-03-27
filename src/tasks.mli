@@ -1,6 +1,6 @@
 (** This module is a representation of tasks*)
 
-exception InvalidDate of (int * int)
+exception InvalidDate
 (** Raised when an invalid date is entered *)
 
 exception AlreadyComplete of int
@@ -44,11 +44,13 @@ val task_date_opt : t -> int -> Date.t option
 
 val completed : t -> int -> bool
 (** [completed tsks n] is true if the [n]th task in tasks [tsks] is
-    completed, false otherwise Raises[Invalid_argument n] if [n] is
-    negative. Raise [Failure] if n is greater than the amount of tasks. *)
+    completed, false otherwise. Raises [Invalid_argument n] if [n] is
+    negative. Raise [Failure] if n is greater than the amount of tasks.
+    Raises [ElementOutOfBounds n] if [n] is greater than the number of
+    tasks in [tsks] *)
 
 val tasks_amount : t -> int
-(** [tasks_amount tsks] is the number of tasks in tasks [tsks].*)
+(** [tasks_amount tsks] is the number of tasks in [tsks].*)
 
 val complete : t -> int -> t
 (** [complete tsks n] is tasks [tsks] after completing the [n]th task
@@ -57,8 +59,6 @@ val complete : t -> int -> t
     the [n]th task is already completed. *)
 
 val add : t -> string -> Date.t option -> t
-(** [add tsks lsts] is tasks [tsks] after creating a new task with name
-    being the first element of [lsts] and the date being created from
-    the second element of [lsts]. Raises: [InvalidDateFormat str] the
-    second element of [lsts] Requires: [lsts] is a string list that
-    contains exactly 2 elements*)
+(** [add tsks name date] is [tsks] after creating a new task with name
+    [name] and the date that is extracted from the Date.t option [date].
+    Raises [InvalidDate] if [date] is [None]*)

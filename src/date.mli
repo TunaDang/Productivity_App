@@ -3,24 +3,19 @@
 exception InvalidDateFormat of string
 (**Raised if an input string is invalid format*)
 
-(* type month = | January | February | March | April | May | June | July
-   | August | September | October | November | December *)
-
 type t
 (** The abstract type of values representing a date *)
 
 val abbrv_name : t -> string
-(** get abbreviated month name of date*)
+(** [abbrv_name date] is the abbreviated name of the month in date
+    [date]. Example: the abbreivated name of Janurary is Jan.*)
 
 val day : t -> int
 (** [day d] is the day of date [t] *)
 
 val month_num : t -> int
-(**[month_num d] is the number corresponding to the month of date [d]*)
-
-(* val num_to_month : int -> month *)
-(**[num_to_month n] is the month abbreivation corresponding to number
-   [n] Requires: [n] is in 1..12 *)
+(**[month_num d] is the number corresponding to the month of date [d].
+   Example: The number corresponding to the month March is 3*)
 
 val compare : t -> t -> int
 (**[compare d1 d2] is -1 if [d1] is calendrically before [d2], 1 if [d1]
@@ -32,7 +27,7 @@ val create_date : string -> t option
     day is a valid integer within the number of days of the month. If
     [str] is empty, [None] is returned, else [Some] date is returned
     Raises: [InvalidDateFormat str] if str is not a string represeting a
-    valid date. Raises[Failure "int_of_string"] if the month or day are
+    valid date. Raises [Failure "int_of_string"] if the month or day are
     not integers.*)
 
 val to_string : t -> string

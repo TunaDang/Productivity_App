@@ -19,7 +19,7 @@ type t = {
   day : int;
 }
 
-(**[days m] equals the days in month [m]*)
+(*[days m] equals the days in month [m]*)
 let days m =
   match m with
   | January | March | May | July | August | October | December -> 31

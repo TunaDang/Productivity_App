@@ -3,13 +3,10 @@ open TodoList
 open Tasks
 open Date
 
-(* JSON TESTS *)
 let sample_tasks = Tasks.from_file "test/data/sample.json"
 let test_write = to_file "test/data/write_test.json" sample_tasks
 
-(* DATE TESTS*)
-
-(**[create_date_helper date_opt] extracts the date from a date option*)
+(* [create_date_helper date_opt] extracts the date from a date option*)
 let create_date_helper (date_opt : Date.t option) : Date.t =
   match date_opt with
   | None -> failwith "Invalid input"
@@ -49,9 +46,15 @@ let date_diff_test
   assert_equal expected
     (date_diff
        (d1 |> Date.create_date |> create_date_helper)
-       (d2 |> Date.create_date |> create_date_helper)) ~printer:string_of_int
+       (d2 |> Date.create_date |> create_date_helper))
+    ~printer:string_of_int
 
-let date_tests =
+let to_string_test (name : string) (d1 : string) (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected
+    (to_string (d1 |> Date.create_date |> create_date_helper))
+
+let create_date_tests =
   [
     create_date_test "Basic test" "1/2" "1/2";
     create_date_test "Feb edge" "2/28" "2/28";
@@ -66,8 +69,17 @@ let date_tests =
     ( "non int input exc" >:: fun _ ->
       assert_raises (Failure "int_of_string") (fun () ->
           Date.create_date "apple/2") );
+  ]
+
+let abbrv_name_tests =
+  [
     abbrv_name_test "January" "1/3" "Jan.";
     abbrv_name_test "December" "12/3" "Dec.";
+    abbrv_name_test "February" "2/3" "Feb.";
+  ]
+
+let compare_tests =
+  [
     compare_test "earlier month" "1/1" "2/1" ~-1;
     compare_test "later month" "3/1" "2/1" 1;
     compare_test "same date" "3/1" "3/1" 0;
@@ -80,4 +92,18 @@ let date_tests =
     date_diff_test "1 month apart" "3/25" "4/21" 27;
   ]
 
-let suite = date_tests
+let to_string_tests =
+  [
+    to_string_test "Basic test Feb 2" "2/12" "2/12";
+    to_string_test "edge test Jan 11" "1/1" "1/1";
+    to_string_test "edge test Dec 31" "12/31" "12/31";
+  ]
+
+let suite =
+  List.flatten
+    [
+      create_date_tests;
+      abbrv_name_tests;
+      compare_tests;
+      to_string_tests;
+    ]
