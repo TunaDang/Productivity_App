@@ -54,7 +54,7 @@ let print_tasks st =
   let open ANSITerminal in
   let tasks = State.get_tasks st in
   let length = Tasks.tasks_amount tasks in
-  let lines = List.map (format_task tasks) (range 0 (length - 1)) in
+  let formatted_tasks = List.map (format_task tasks) (range 0 (length - 1)) in
   erase Screen;
   set_cursor 1 1;
   print_ascii_art ();
@@ -62,7 +62,7 @@ let print_tasks st =
     (fun (str, c) ->
       if c then print_string [ ANSITerminal.Bold ] (str ^ "\n")
       else print_endline str)
-    lines;
+      formatted_tasks;
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
 
