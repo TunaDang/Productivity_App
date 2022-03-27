@@ -40,6 +40,17 @@ let compare_test
        (d1 |> Date.create_date |> create_date_helper)
        (d2 |> Date.create_date |> create_date_helper))
 
+let date_diff_test
+    (name : string)
+    (d1 : string)
+    (d2 : string)
+    (expected : int) =
+  name >:: fun _ ->
+  assert_equal expected
+    (date_diff
+       (d1 |> Date.create_date |> create_date_helper)
+       (d2 |> Date.create_date |> create_date_helper)) ~printer:string_of_int
+
 let date_tests =
   [
     create_date_test "Basic test" "1/2" "1/2";
@@ -62,6 +73,11 @@ let date_tests =
     compare_test "same date" "3/1" "3/1" 0;
     compare_test "later day" "3/2" "3/1" 1;
     compare_test "earlier day" "3/2" "3/3" ~-1;
+    date_diff_test "same date" "3/2" "3/2" 0;
+    date_diff_test "1st date is later" "3/3" "3/2" ~-1;
+    date_diff_test "same month" "2/2" "2/25" 23;
+    date_diff_test "Different Month" "2/2" "12/12" 313;
+    date_diff_test "1 month apart" "3/25" "4/21" 27;
   ]
 
 let suite = date_tests

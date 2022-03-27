@@ -3,19 +3,8 @@
 exception InvalidDateFormat of string
 (**Raised if an input string is invalid format*)
 
-(* type month =
-  | January
-  | February
-  | March
-  | April
-  | May
-  | June
-  | July
-  | August
-  | September
-  | October
-  | November
-  | December *)
+(* type month = | January | February | March | April | May | June | July
+   | August | September | October | November | December *)
 
 type t
 (** The abstract type of values representing a date *)
@@ -48,3 +37,7 @@ val create_date : string -> t option
 
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
+
+val date_diff : t -> t -> int
+(**[date_diff d1 d2] is the days between date [d1] and date [d2] if [d1]
+   comes calendrically before [d2]. Equals -1 if [d1] comes after [d2]*)
