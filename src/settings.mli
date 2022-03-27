@@ -3,8 +3,6 @@
 exception InvalidDate of (int * int)
 (** Raised when an invalid date is entered *)
 
-exception ElementOutofBounds of int
-
 type t
 (** The abstract type of values representing settings. *)
 

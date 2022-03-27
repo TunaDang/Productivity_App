@@ -15,7 +15,7 @@ let setting_of_json json = ()
    json |> member "due_date" |> to_string |> create_date; completed =
    json |> member "completed" |> to_bool; } *)
 
-let from_file file = ()
+let from_file file = failwith "unimpl"
 (* let json = Yojson.Basic.from_file file in json |> to_list |> List.map
    setting_of_json *)
 
@@ -25,14 +25,14 @@ let format tsk = ()
    date -> `String (Date.to_string date) ); ("completed", `Bool
    completed); ] *)
 
-let to_file file sets = ()
+let to_file file sets = failwith "unimpl"
 (* Yojson.Basic.to_file file (`List (List.map format sets)) *)
 
-let rec settings sets = ()
+let rec settings sets = failwith "unimpl"
 (* match sets with | [] -> [] | { name; due_date; completed } :: t ->
    name :: setting_names t *)
 
-let setting sets n = ()
+let setting sets n = failwith "unimpl"
 (* (List.nth sets n).name *)
 
 let set_display_completed = ()

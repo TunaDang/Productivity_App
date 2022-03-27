@@ -1,18 +1,46 @@
-type t = { current_tasks : Tasks.t }
+type page =
+  | Main
+  | Settings
 
-let pack_state (tsks : Tasks.t) : t = { current_tasks = tsks }
-let clear_state () = pack_state (Tasks.empty ())
+type t = {
+  current_tasks : Tasks.t;
+  current_settings : Settings.t;
+  current_page : page;
+}
 
-let update_tasks (st : t) (cmd : Command.t) =
+let pack_state (tsks : Tasks.t) (settings : Settings.t) (page : page) :
+    t =
+  {
+    current_tasks = tsks;
+    current_settings = settings;
+    current_page = page;
+  }
+
+let clear_state () =
+  pack_state (Tasks.empty ())
+    (Settings.from_file "../data/settings.json")
+    Main
+
+let update_state (st : t) (cmd : Command.t) =
   match cmd with
   | Add (phrase, date) ->
-      Tasks.add st.current_tasks (Command.get_phrase cmd) date
-      |> pack_state
+      let new_tasks =
+        Tasks.add st.current_tasks (Command.get_phrase cmd) date
+      in
+      pack_state new_tasks st.current_settings Main
   | Complete task -> (
-      try Tasks.complete st.current_tasks task |> pack_state
+      try
+        let new_tasks = Tasks.complete st.current_tasks task in
+        pack_state new_tasks st.current_settings Main
       with Tasks.ElementOutofBounds n -> st)
   | Edit (phrase, date) -> failwith "Unsupported"
   | Clear -> clear_state ()
+  | Settings -> pack_state st.current_tasks st.current_settings Settings
+  | Select setting_id -> st
+  | Date date ->
+      pack_state st.current_tasks
+        (Settings.set_due_before st.current_settings date)
+        Settings
   | Help -> failwith "Unsupported"
   | Quit -> failwith "Unsupported"
 
