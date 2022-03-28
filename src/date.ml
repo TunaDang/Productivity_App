@@ -19,7 +19,7 @@ type t = {
   day : int;
 }
 
-(**[days m] equals the days in month [m]*)
+(*[days m] equals the days in month [m]*)
 let days m =
   match m with
   | January | March | May | July | August | October | December -> 31
@@ -109,3 +109,36 @@ let create_date str =
 
 let to_string date =
   string_of_int (month_num date) ^ "/" ^ string_of_int (day date)
+
+(* Returns number of days in months between [m1] and [m2]*)
+let rec days_in_months_help m1 m2 =
+  match (m1, m2) with
+  | x, y when x = y -> 0
+  | x, y -> (x |> num_to_month |> days) + days_in_months_help (x + 1) y
+
+let date_diff d1 d2 =
+  let comp = compare d1 d2 in
+  if comp = 0 then comp
+  else if comp = 1 then -1
+  else if d1.month = d2.month then d2.day - d1.day
+  else
+    let days_left_in_m1 = days d1.month - d1.day in
+    let days_in_months_bw =
+      days_in_months_help (month_num d1 + 1) (month_num d2)
+    in
+    let days_in_m2 = d2.day in
+    days_left_in_m1 + days_in_months_bw + days_in_m2
+
+let days_remaining date =
+  let open Unix in
+  let time = time () |> localtime in
+  match time with
+  | { tm_mday; tm_mon } ->
+      let current_date =
+        match
+          create_date (Printf.sprintf "%d/%d" (tm_mon + 1) tm_mday)
+        with
+        | Some x -> x
+        | None -> failwith "current date must be a valid date"
+      in
+      date_diff current_date date

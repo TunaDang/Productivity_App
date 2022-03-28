@@ -26,23 +26,38 @@ let pack_string_list l1 l2 = List.map2 (fun x y -> (x, y)) l1 l2
 let no_date_format = "%d. %s"
 let date_format = "%d. %s [%s] - <> days remaining"
 
+let unpack_some = function
+  | Some x -> x
+  | None -> failwith "Cannot be none"
+
 (* helper function to format a single task into the right output*)
 let format_task tasks i =
   (*to display starting at 1*)
   (*TODO: factor this out into different functions based on complete or
     date*)
   let name = Tasks.task_name tasks i in
-  let date = Tasks.task_date tasks i in
+  let date_opt = Tasks.task_date_opt tasks i in
   let complete = Tasks.completed tasks i in
-  let i = i + 1 in
+  let print_i = i + 1 in
   let star = if complete then "( * )" else "(   )" in
+  let mods = ref (if complete then [ ANSITerminal.Bold ] else []) in
   let output =
-    if date = "" then Printf.sprintf "%s   %d. %s" star i name
+    if date_opt = None then
+      Printf.sprintf "%s   %d. %s" star print_i name
     else
-      Printf.sprintf "%s   %d. %s [%s] - <> days remaining" star i name
-        date
+      let date_str = Tasks.task_date_str tasks i in
+      let days_left = Date.days_remaining (unpack_some date_opt) in
+      if days_left < 0 then
+        let () =
+          if complete then () else mods := ANSITerminal.red :: !mods
+        in
+        Printf.sprintf "%s   %d. %s [%s] - OVERDUE" star print_i name
+          date_str
+      else
+        Printf.sprintf "%s   %d. %s [%s] - <%d> days remaining" star
+          print_i name date_str days_left
   in
-  (output, complete)
+  (output, complete, !mods)
 
 let print_ascii_art () =
   ANSITerminal.print_string [ ANSITerminal.yellow ] ascii_art
@@ -54,15 +69,15 @@ let print_tasks st =
   let open ANSITerminal in
   let tasks = State.get_tasks st in
   let length = Tasks.tasks_amount tasks in
-  let lines = List.map (format_task tasks) (range 0 (length - 1)) in
+  let formatted_tasks =
+    List.map (format_task tasks) (range 0 (length - 1))
+  in
   erase Screen;
   set_cursor 1 1;
   print_ascii_art ();
   List.iter
-    (fun (str, c) ->
-      if c then print_string [ ANSITerminal.Bold ] (str ^ "\n")
-      else print_endline str)
-    lines;
+    (fun (str, com, mods) -> print_string mods (str ^ "\n"))
+    formatted_tasks;
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
 
