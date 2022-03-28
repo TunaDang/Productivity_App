@@ -31,3 +31,11 @@ val set_due_before : t -> Date.t option -> t
 (** [set_due_before sets d] is settings [sets] after setting
     [due_before] to [Date.t option] [d]. Raises: [InvalidDate int * int]
     for invalid date entered *)
+
+val get_display_completed : t -> bool
+(** [get_display_completed sets] will return whether the setting to 
+    display completed tasks is on or not.*)
+
+val get_due_before : t -> Date.t option
+(** [get_due_before sets] will return whether the value of the setting 
+    to display tasks due before a certain date.*)

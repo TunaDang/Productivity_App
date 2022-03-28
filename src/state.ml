@@ -53,9 +53,27 @@ let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
         Settings
   | Exit -> pack_state st.current_tasks st.current_settings Main
 
-let get_task_names (tasks : t) = Tasks.task_names tasks.current_tasks
-let get_dates (tasks : t) = Tasks.task_dates tasks.current_tasks
-let get_tasks state = state.current_tasks
+let get_task_names (state : t) =
+  let completed =
+    Settings.get_display_completed state.current_settings
+  in
+  let due_before = Settings.get_due_before state.current_settings in
+  Tasks.tasks_names_with_filter state.current_tasks completed due_before
+
+let get_dates (state : t) =
+  let completed =
+    Settings.get_display_completed state.current_settings
+  in
+  let due_before = Settings.get_due_before state.current_settings in
+  Tasks.tasks_dates_with_filter state.current_tasks completed due_before
+
+let get_tasks state =
+  let completed =
+    Settings.get_display_completed state.current_settings
+  in
+  let due_before = Settings.get_due_before state.current_settings in
+  Tasks.tasks_filter state.current_tasks completed due_before
+
 let current_page st = st.current_page
 
 let write_state (file_name : string) (st : t) =

@@ -36,7 +36,8 @@ val current_page : t -> page
 (** [current_page st] will return the page of the current state [st].*)
 
 val get_tasks : t -> Tasks.t
-(** [get_tasks st] will get the Tasks.t for state [st]*)
+(** [get_tasks st] will get the Tasks.t for state [st], reflecting
+    different changes in the filter.*)
 
 val clear_state : unit -> t
 (** [clear_state st] will reset the state [st] of the calendar. *)

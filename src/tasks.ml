@@ -119,3 +119,25 @@ let rec task_dates tsks =
   | [] -> []
   | { name; due_date; completed } :: t ->
       (due_date |> date_opt_to_str) :: task_dates t
+
+let filter filter_function tsks = List.filter filter_function tsks
+
+let still_on_time task due_before =
+  Date.compare (extract_date_helper task.due_date) due_before = ~-1
+
+let tasks_filter tsks completed due_before =
+  match (completed, due_before) with
+  | true, Some date ->
+      filter
+        (fun task -> (not task.completed) && still_on_time task date)
+        tsks
+  | false, Some date ->
+      filter (fun task -> still_on_time task date) tsks
+  | true, None -> filter (fun task -> not task.completed) tsks
+  | false, None -> tsks
+
+let tasks_names_with_filter tsks completed due_before =
+  tasks_filter tsks completed due_before |> task_names
+
+let tasks_dates_with_filter tsks completed due_before =
+  tasks_filter tsks completed due_before |> task_dates
