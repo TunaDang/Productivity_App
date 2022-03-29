@@ -29,6 +29,8 @@ let settings_test =
       [ "display_completed"; "due_before" ];
     setting_test "get 1st setting name from sample settings"
       sample_settings 0 "display_completed";
+    setting_test "get 2nd setting name from sample settings"
+      sample_settings 1 "due_before";
   ]
 
 let suite = List.flatten [ settings_test ]
