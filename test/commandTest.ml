@@ -136,11 +136,11 @@ let assertion_sets_tests =
       "         ";
     assertion_sets_test
       "Settings cmd assertion TEST 6: invalid date raises Invalid"
-      Invalid "date 6/40";
+      Malformed "date 6/40";
     assertion_sets_test
       "Settings cmd assertion TEST 7: Incorrect format of date raises \
        Invalid"
-      Invalid " date  1     /3      0      ";
+      Malformed " date  1     /3      0      ";
   ]
 
 let get_phrase_test

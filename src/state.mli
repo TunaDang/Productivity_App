@@ -35,6 +35,9 @@ val write_state : string -> t -> unit
 val current_page : t -> page
 (** [current_page st] will return the page of the current state [st].*)
 
+val current_settings : t -> Settings.t
+(** [current_settings st] will return the current settings. *)
+
 val get_tasks : t -> Tasks.t
 (** [get_tasks st] will get the Tasks.t for state [st], reflecting
     different changes in the filter.*)

@@ -110,6 +110,12 @@ let create_date str =
 let to_string date =
   string_of_int (month_num date) ^ "/" ^ string_of_int (day date)
 
+let to_string_opt date_opt =
+  match date_opt with
+  | None -> "None"
+  | Some date ->
+      string_of_int (month_num date) ^ "/" ^ string_of_int (day date)
+
 (* Returns number of days in months between [m1] and [m2]*)
 let rec days_in_months_help m1 m2 =
   match (m1, m2) with

@@ -4,6 +4,17 @@ exception Exit
 
 (* let todo_file = "data" ^ Filename.dir_sep ^ "todolist.json" *)
 
+let rec get_settings_command () =
+  Output.input ();
+  match Command.parse_settings (read_line ()) with
+  | exception Command.Empty ->
+      Output.empty ();
+      get_settings_command ()
+  | exception Command.Malformed ->
+      Output.malformed ();
+      get_settings_command ()
+  | x -> x
+
 let rec get_command () =
   Output.input ();
   (* > character for input*)
@@ -24,31 +35,41 @@ let evaluate state command =
   | Command.Quit ->
       Output.quit ();
       exit 0
-  | Command.Add (_, _) | Clear -> State.update_state state command
+  | Command.Add (_, _) | Clear | Settings ->
+      State.update_state state command
   | Command.Complete i ->
       State.update_state state (Command.Complete (i - 1))
-  | Command.Settings -> failwith "gimme a more sec"
   | Edit (_, _) -> failwith "unsupported"
   | Help -> failwith "Help should not end up here"
 
-let evalute_setting state command =
+let evaluate_settings state command =
   match command with
   | Command.Toggle _ | Command.Date _ | Command.Exit ->
       State.update_settings_state state command
 
 let rec repl state file =
-  let command = get_command () in
-  let state = evaluate state command in
-  State.write_state file state;
-  Output.print_tasks state;
-  repl state file
+  match State.current_page state with
+  | Main ->
+      let command = get_command () in
+      let state = evaluate state command in
+      State.write_state file state;
+      if command = Command.Settings then Output.print_settings state
+      else Output.print_tasks state;
+      repl state file
+  | Settings ->
+      let sets_command = get_settings_command () in
+      let state = evaluate_settings state sets_command in
+      State.write_state file state;
+      if sets_command = Command.Exit then Output.print_tasks state
+      else Output.print_settings state;
+      repl state file
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   let open TodoList in
   let open ANSITerminal in
   (*RIGHT NOW THESE LINES GET OVERWRITTEN*)
-  erase Screen;
+  ignore (Sys.command "clear");
   move_cursor 1 1;
   print_string [ ANSITerminal.red ]
     "\n\nWelcome to The Ocaml Todo List.\n";

@@ -42,3 +42,4 @@ let set_due_before sets d =
 
 let get_display_completed sets = sets.display_completed
 let get_due_before sets = sets.due_before
+let toggle sets n = n = 0

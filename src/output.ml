@@ -59,6 +59,21 @@ let format_task tasks i =
   in
   (output, complete, !mods)
 
+let format_settings (sets : Settings.t) i =
+  let toggle = Settings.toggle sets i in
+  let name = Settings.setting sets i |> String.capitalize_ascii in
+  let print_i = i + 1 in
+  if toggle then
+    if Settings.get_display_completed sets then
+      Printf.sprintf "%d. %s: ON" print_i name
+    else Printf.sprintf "%d. %s: OFF" print_i name
+  else
+    let due_before = Settings.get_due_before sets in
+    if due_before = None then Printf.sprintf "%d. %s: None" print_i name
+    else
+      Printf.sprintf "%d. %s: %s" print_i name
+        (Date.to_string_opt due_before)
+
 let print_ascii_art () =
   ANSITerminal.print_string [ ANSITerminal.yellow ] ascii_art
 
@@ -72,12 +87,27 @@ let print_tasks st =
   let formatted_tasks =
     List.map (format_task tasks) (range 0 (length - 1))
   in
-  erase Screen;
+  ignore (Sys.command "clear");
   set_cursor 1 1;
   print_ascii_art ();
   List.iter
     (fun (str, com, mods) -> print_string mods (str ^ "\n"))
     formatted_tasks;
+  print_endline "\n\n\n\n\n";
+  set_cursor 1 100
+
+let print_settings st =
+  let open ANSITerminal in
+  let length = 2 in
+  let formatted_settings =
+    List.map
+      (format_settings (State.current_settings st))
+      (range 0 (length - 1))
+  in
+  ignore (Sys.command "clear");
+  set_cursor 1 1;
+  print_ascii_art ();
+  List.iter (fun str -> print_endline str) formatted_settings;
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
 
@@ -87,6 +117,8 @@ let empty () = print_endline "Empty input. Please re-enter valid entry."
 
 let malformed () =
   print_endline "Malformed input. Please re-enter valid entry."
+
+let settings () = "Here's the settings page"
 
 let help () =
   print_endline

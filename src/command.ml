@@ -87,9 +87,9 @@ let parse_settings str =
           else
             let date_string = get_first rest in
             Date (Date.create_date date_string)
-        with _ -> raise Invalid)
+        with _ -> raise Malformed)
     | "exit" -> if rest = [] then Exit else raise Malformed
-    | _ -> raise Invalid
+    | _ -> raise Malformed
 
 let get_phrase t =
   match t with

@@ -75,6 +75,7 @@ let get_tasks state =
   Tasks.tasks_filter state.current_tasks completed due_before
 
 let current_page st = st.current_page
+let current_settings st = st.current_settings
 
 let write_state (file_name : string) (st : t) =
   Tasks.to_file file_name st.current_tasks

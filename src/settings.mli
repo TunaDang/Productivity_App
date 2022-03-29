@@ -39,3 +39,7 @@ val get_display_completed : t -> bool
 val get_due_before : t -> Date.t option
 (** [get_due_before sets] will return whether the value of the setting 
     to display tasks due before a certain date.*)
+
+val toggle : t -> int -> bool
+(** [toggle sets n] returns true if the nth setting in settings [sets] 
+    is a toggle, and false otherwise. *)

@@ -33,6 +33,10 @@ val create_date : string -> t option
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
 
+val to_string_opt : t option -> string
+(** [to_string_opt date] is [to_string date] but takes in an option. If
+    date is None, it will return "None" as the string.*)
+
 val date_diff : t -> t -> int
 (**[date_diff d1 d2] is the days between date [d1] and date [d2] if [d1]
    comes calendrically before [d2]. Equals -1 if [d1] comes after [d2]*)
