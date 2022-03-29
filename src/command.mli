@@ -24,6 +24,7 @@ type phrase = string list
 type setting_t =
   | Toggle of bool
   | Date of Date.t option
+  | SetsHelp
   | Exit
 
 (** Type [t] represents the user's commands. Add and edit requires the

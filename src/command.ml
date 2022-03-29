@@ -3,6 +3,7 @@ type phrase = string list
 type setting_t =
   | Toggle of bool
   | Date of Date.t option
+  | SetsHelp
   | Exit
 
 type t =
@@ -88,6 +89,7 @@ let parse_settings str =
             let date_string = get_first rest in
             Date (Date.create_date date_string)
         with _ -> raise Malformed)
+    | "help" -> if rest = [] then SetsHelp else raise Malformed
     | "exit" -> if rest = [] then Exit else raise Malformed
     | _ -> raise Malformed
 

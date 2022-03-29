@@ -13,6 +13,9 @@ let rec get_settings_command () =
   | exception Command.Malformed ->
       Output.malformed ();
       get_settings_command ()
+  | SetsHelp ->
+      Output.help_settings ();
+      get_settings_command ()
   | x -> x
 
 let rec get_command () =
@@ -44,7 +47,8 @@ let evaluate state command =
 
 let evaluate_settings state command =
   match command with
-  | Command.Toggle _ | Command.Date _ | Command.Exit ->
+  | Command.Toggle _ | Command.Date _ | Command.Exit | Command.SetsHelp
+    ->
       State.update_settings_state state command
 
 let rec repl state file =
@@ -85,7 +89,9 @@ let main () =
           ignore (open_out todo_file);
           Tasks.empty ()
       in
-      let settings = Settings.from_file "data/settings.json" in
+      let settings =
+        Settings.from_file "data/attributes/settings.json"
+      in
       (* create new file if none exists*)
       let state = State.pack_state tasks settings State.Main in
       Output.print_tasks state;

@@ -16,6 +16,31 @@ let ascii_art =
   '--' '--'' '--'
 |}
 
+let camel =
+  {|
+                  ,,__
+        ..  ..   / o._)
+       /--'/--\  \-'||
+      /        \_/ / |     
+    .'\  \__\  __.'.'    
+      )\ |  )\ |      
+     // \\ // \\
+    ||_  \\|_  \\_
+    '--' '--'' '--'
+  |}
+
+let settings_page =
+  {|
+   _____      _   _   _                 
+  / ____|    | | | | (_)                
+ | (___   ___| |_| |_ _ _ __   __ _ ___ 
+  \___ \ / _ \ __| __| | '_ \ / _` / __|
+  ____) |  __/ |_| |_| | | | | (_| \__ \
+ |_____/ \___|\__|\__|_|_| |_|\__, |___/
+                               __/ |    
+                              |___/     
+|}
+
 (*Print them in the following way, where i is number of task i. <Name of
   Task> -- [<due date>] - <due date - current date> days remaining
   ... *)
@@ -77,6 +102,12 @@ let format_settings (sets : Settings.t) i =
 let print_ascii_art () =
   ANSITerminal.print_string [ ANSITerminal.yellow ] ascii_art
 
+let print_camel () =
+  ANSITerminal.print_string [ ANSITerminal.yellow ] camel
+
+let print_settings_menu () =
+  ANSITerminal.print_string [ ANSITerminal.yellow ] settings_page
+
 (* Helper function to get a range list*)
 let rec range i j = if i > j then [] else i :: range (i + 1) j
 
@@ -106,7 +137,7 @@ let print_settings st =
   in
   ignore (Sys.command "clear");
   set_cursor 1 1;
-  print_ascii_art ();
+  print_settings_menu ();
   List.iter (fun str -> print_endline str) formatted_settings;
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
@@ -128,5 +159,14 @@ let help () =
      command line: “add [task_name]. (optional) [date]”. Note: the \
      period is required. \n\
      * To mark a task completed, type “complete [index]”\n\
-     * To clear the list, type 'clear'\n\
-     * To leave the todo list, type: “quit”."
+     * To clear the list, type “clear”\n\
+     * To leave the todo list, type: “quit”\n\
+     * To enter the settings menu, type “settings”"
+
+let help_settings () =
+  print_endline
+    "Here are some the settings currently supported: \n\
+     * To toggle display completed items on or off, type “toggle on/off”\n\
+     * To set the due date, type “date ##/##”.\n\
+     * To set the due date to None, type “date”\n\
+     * To exit the settings menu, type “exit”."

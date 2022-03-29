@@ -123,7 +123,7 @@ let rec task_dates tsks =
 let filter filter_function tsks = List.filter filter_function tsks
 
 let still_on_time task due_before =
-  try Date.compare (extract_date_helper task.due_date) due_before = ~-1
+  try Date.compare (extract_date_helper task.due_date) due_before <= 0
   with InvalidDate -> true
 
 let tasks_filter tsks completed due_before =

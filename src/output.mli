@@ -31,3 +31,6 @@ val print_ascii_art : unit -> unit
 
 val help : unit -> unit
 (** prints out help text to the user*)
+
+val help_settings : unit -> unit
+(** prints out help text to the user in the settings menu*)

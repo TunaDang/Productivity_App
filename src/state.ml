@@ -19,7 +19,8 @@ let pack_state (tsks : Tasks.t) (settings : Settings.t) (page : page) :
 let clear_state () =
   {
     current_tasks = Tasks.empty ();
-    current_settings = Settings.from_file "data/settings.json";
+    current_settings =
+      Settings.from_file "data/attributes/settings.json";
     current_page = Main;
   }
 
@@ -51,6 +52,7 @@ let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
       pack_state st.current_tasks
         (Settings.set_due_before st.current_settings date)
         Settings
+  | SetsHelp -> st
   | Exit -> pack_state st.current_tasks st.current_settings Main
 
 let get_task_names (state : t) =

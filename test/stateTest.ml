@@ -102,7 +102,7 @@ let state_add_dates_tests =
     state_test_dates "State Dates TEST 3: Adding two\n       items"
       [ "1/1"; "1/2" ] adding_two_item;
     state_test_dates
-      "State\n       Dates TEST 4: Clearing after adding two items" []
+      "State Dates TEST 4: Clearing after adding two items" []
       clearing_state;
   ]
 
