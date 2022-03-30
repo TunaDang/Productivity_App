@@ -1,1 +1,7 @@
-[{"name":"buy milk","due_date":"4/12","completed":false}]
+[
+  {
+    "name": "buy milk",
+    "due_date": "4/12",
+    "completed": false
+  }
+]

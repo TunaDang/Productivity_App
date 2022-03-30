@@ -1,16 +1,25 @@
 (** Module to represent the current state of the to do list.*)
 
 type t
-(** Abstract type representing the current state of the to do list*)
+(** Abstract type representing the current state of the to do list.*)
 
-val pack_state : Tasks.t -> t
-(** [init_state tsks] is the initial state of the to do list based on a
-    given tasks.*)
+(** Type representing the current page the user is on.*)
+type page =
+  | Main
+  | Settings
 
-val update_tasks : t -> Command.t -> t
-(** [update_task cmd st] will update the current state [st] with the
-    given command [cmd]. Possible commands are add, edit, complete, and
-    quit. *)
+val pack_state : Tasks.t -> Settings.t -> page -> t
+(** [pack_state tsks] packs a state of the to do list based on a given
+    tasks, settings, and current page.*)
+
+val update_state : t -> Command.t -> t
+(** [update_state st cmd] will update the current state [st] with the
+    given command [cmd]. Possible commands are add, edit, complete,
+    settings, select, date, and quit. *)
+
+val update_settings_state : t -> Command.setting_t -> t
+(** [update_setting_state st setting_cmd] will update the setting of the
+    current state [st] with the given [setting_cmd].*)
 
 val get_task_names : t -> string list
 (** [current_tasks st] is the list of all task names in the state [st].*)
@@ -23,8 +32,15 @@ val write_state : string -> t -> unit
 (** [write_state file_name st] will write the current state [st] to a
     JSON file with name [file_name].*)
 
+val current_page : t -> page
+(** [current_page st] will return the page of the current state [st].*)
+
+val current_settings : t -> Settings.t
+(** [current_settings st] will return the current settings. *)
+
 val get_tasks : t -> Tasks.t
-(** [get_tasks st] will get the Tasks.t for state [st]*)
+(** [get_tasks st] will get the Tasks.t for state [st], reflecting
+    different changes in the filter.*)
 
 val clear_state : unit -> t
 (** [clear_state st] will reset the state [st] of the calendar. *)

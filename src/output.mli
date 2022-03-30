@@ -10,6 +10,10 @@ val ascii_art : string
   printed in the same order as they appear in the list*)
 val print_tasks : State.t -> unit
 
+(*Prints the settings in the current list of the application and their
+  current values.*)
+val print_settings : State.t -> unit
+
 val input : unit -> unit
 (** prints the input character: '>' *)
 
@@ -27,3 +31,6 @@ val print_ascii_art : unit -> unit
 
 val help : unit -> unit
 (** prints out help text to the user*)
+
+val help_settings : unit -> unit
+(** prints out help text to the user in the settings menu*)

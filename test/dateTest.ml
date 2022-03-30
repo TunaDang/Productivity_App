@@ -3,7 +3,8 @@ open TodoList
 open Tasks
 open Date
 
-let sample_tasks = Tasks.from_file "test/data/sample.json"
+(* JSON TESTS *)
+let sample_tasks = Tasks.from_file "test/data/sample_tasks.json"
 let test_write = to_file "test/data/write_test.json" sample_tasks
 
 (* [create_date_helper date_opt] extracts the date from a date option*)

@@ -18,8 +18,17 @@ type phrase = string list
 
     For Add and Edit commands, the phrase cannot be empty. *)
 
-(** Type [command] represents the user's commands. Add and edit requires
-    the user to include a phrase and optionally a date. Phrase is the
+(** The type [setting_t] represents commands used for changing the
+    settings. Currently, the supported settings commands are turning a
+    setting on or off, and setting the date of a setting.*)
+type setting_t =
+  | Toggle of bool
+  | Date of Date.t option
+  | SetsHelp
+  | Exit
+
+(** Type [t] represents the user's commands. Add and edit requires the
+    user to include a phrase and optionally a date. Phrase is the
     description of a task, which can be whatever the user inputs. The
     date represents the deadline of the task, which is optional. If the
     user wishes to include a deadline of the task, then they should
@@ -35,6 +44,7 @@ type t =
   | Complete of int
   | Edit of phrase * Date.t option
   | Clear
+  | Settings
   | Help
   | Quit
 
@@ -60,11 +70,32 @@ val parse : string -> t
     Raises: [Empty] if [str] contains only spaces or is the empty
     string.
 
-    Raises; [Malformed] if the verb is not one of Add, Edit, Complete,
+    Raises: [Malformed] if the verb is not one of Add, Edit, Complete,
     Save, or Quit. *)
+
+val parse_settings : string -> setting_t
+(** [parse_settings str] parses a command specifically for changing a
+    setting. The toggle command only takes strings "on" and "off".
+
+    Examples:
+
+    - "toggle on" and "toggle off" are the two possible commands for
+      toggle.
+
+    - "date 1/2" to set a setting's date to 1/2
+
+    - if you just enter "date" for this setting, it will set the setting
+      to be None
+
+    Raises: [Malformed] if toggle does not include "on" or "off" in the
+    input, or if the date inputed is invalid.
+
+    Raises: [Invalid] if the date inputted to set a setting to a
+    specific date is not in the right format, is not a valid date, or
+    extra spaces. *)
 
 val get_phrase : t -> string
 (** [get_phrase cmd] only works on Add and Edit and it is the name of
     the to do list item that the user specifies as a string.
 
-    Raises: [Invalid] if [cmd] is not Add or Edit *)
+    Raises: [Invalid] if [cmd] is not Add or Edit. *)
