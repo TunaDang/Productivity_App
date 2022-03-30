@@ -48,17 +48,37 @@ let state_test_dates
   assert_equal expected_output (State.get_dates input_state)
 
 (* initializing an empty state *)
-let empty_state = State.pack_state (Tasks.empty ())
+let empty_state = State.clear_state ()
 
 let adding_one_item =
-  State.update_tasks empty_state
+  State.update_state empty_state
     ("add Finish my homework. 1/1" |> Command.parse)
 
 let adding_two_item =
-  State.update_tasks adding_one_item
+  State.update_state adding_one_item
     ("add Complete my hw. 1/2" |> Command.parse)
 
 let clearing_state = State.clear_state ()
+
+let going_to_settings_menu =
+  State.update_state clearing_state ("settings" |> Command.parse)
+
+let exiting_menu =
+  State.update_settings_state going_to_settings_menu
+    ("exit" |> Command.parse_settings)
+
+let state_page_tests =
+  [
+    ( "Page state TEST 1: testing that current page of the state \
+       changes after apply settings command"
+    >:: fun _ ->
+      assert_equal State.Settings
+        (State.current_page going_to_settings_menu) );
+    ( "Page state TEST 2: Testing that current page of the state \
+       changes after exiting the settings menu"
+    >:: fun _ ->
+      assert_equal State.Settings (State.current_page exiting_menu) );
+  ]
 
 let state_add_tasks_tests =
   [
@@ -79,7 +99,7 @@ let state_add_dates_tests =
     state_test_dates "State Dates TEST 1: Empty state" [] empty_state;
     state_test_dates "State Dates TEST 2: Adding one item" [ "1/1" ]
       adding_one_item;
-    state_test_dates "State Dates TEST 3: Adding two items"
+    state_test_dates "State Dates TEST 3: Adding two\n       items"
       [ "1/1"; "1/2" ] adding_two_item;
     state_test_dates
       "State Dates TEST 4: Clearing after adding two items" []

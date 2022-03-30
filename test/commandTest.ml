@@ -52,6 +52,97 @@ let parse_clear_test =
     parse_test "Clear TEST 2: Parsing the clear command" Clear "clear.";
   ]
 
+let parse_settings_test =
+  [
+    parse_test "Settings TEST 1: Parsing regular settings command"
+      Settings "settings";
+    parse_test "Settings TEST 2: Parsing regular settings command"
+      Settings "settings.";
+  ]
+
+let settings_cmd_test
+    (name : string)
+    (expected_sets_cmd : Command.setting_t)
+    input_sets_cmd =
+  name >:: fun _ ->
+  assert_equal expected_sets_cmd (Command.parse_settings input_sets_cmd)
+
+let toggle_command_tests =
+  [
+    settings_cmd_test "Toggle TEST 1: Testing turning things on"
+      (Toggle true) "toggle on";
+    settings_cmd_test "Toggle TEST 2: Testing turning things off"
+      (Toggle false) "toggle off";
+    settings_cmd_test
+      "Toggle TEST 3: Testing turning things on with spaces"
+      (Toggle true) "      toggle        on";
+    settings_cmd_test
+      "Toggle TEST 4: Testing turning things off with spaces"
+      (Toggle false) "      toggle        off   ";
+  ]
+
+let parsing_date_tests =
+  [
+    settings_cmd_test "Date_parse TEST 1: Testing valid date"
+      (Date (Date.create_date "1/1"))
+      "date 1/1";
+    settings_cmd_test "Date_parse TEST 2: Testing another valid date"
+      (Date (Date.create_date "12/11"))
+      "date  12/11";
+    settings_cmd_test
+      "Date_parse TEST 3: Testing another valid date with spaces in \
+       the phrase"
+      (Date (Date.create_date "12/11"))
+      "   date       12/11        ";
+    settings_cmd_test "Date_parse TEST 4: Testing date with no date"
+      (Date (Date.create_date ""))
+      "   date         ";
+  ]
+
+let parse_exit_test =
+  [
+    settings_cmd_test "Exit TEST 1: Parsing the exit command" Exit
+      "exit";
+    settings_cmd_test
+      "Exit TEST 2: Parsing the exit command with spaces" Exit
+      "      exit       ";
+  ]
+
+let assertion_sets_test (name : string) expected_exception input_command
+    =
+  name >:: fun _ ->
+  assert_raises expected_exception (fun () ->
+      Command.parse_settings input_command)
+
+let assertion_sets_tests =
+  [
+    assertion_sets_test
+      "Settings cmd assertion TEST 1: Just the word toggle will be \
+       malformed"
+      Malformed "toggle";
+    assertion_sets_test
+      "Settings cmd assertion TEST 2: toggle with other phrases is \
+       malformed"
+      Malformed "toggle hello";
+    assertion_sets_test
+      "Settings cmd assertion TEST 3: toggle with other phrases with \
+       spaces is malformed"
+      Malformed "     toggle  what      is going    on";
+    assertion_sets_test
+      "Settings cmd assertion TEST 4: empty phrase raises empty" Empty
+      "";
+    assertion_sets_test
+      "Settings cmd assertion TEST 5: spaces raise empty" Empty
+      "         ";
+    assertion_sets_test
+      "Settings cmd assertion TEST 6: invalid date raises Invalid"
+      Malformed "date 6/40";
+    assertion_sets_test
+      "Settings cmd assertion TEST 7: Incorrect format of date raises \
+       Invalid"
+      Malformed " date  1     /3      0      ";
+  ]
+
 let get_phrase_test
     (name : string)
     (expected_output : string)
@@ -78,32 +169,36 @@ let get_phrase_tests =
       "add        finish   my       homework.      3/2";
   ]
 
+let assertion_test (name : string) expected_exception input_command =
+  name >:: fun _ ->
+  assert_raises expected_exception (fun () ->
+      Command.parse input_command)
+
 let assertion_tests =
   [
-    ( "Assertion TEST 1: Assert Command raises Malformed for wrong verb"
-    >:: fun _ ->
-      assert_raises Malformed (fun () ->
-          Command.parse "finish my homework please") );
-    ( "Assertion TEST 2: Assert Command raises Empty for an empty \
+    assertion_test
+      "Assertion TEST 1: Assert Command raises Malformed for wrong verb"
+      Malformed "finish my homework please";
+    assertion_test
+      "Assertion TEST 2: Assert Command raises Empty for an empty \
        command"
-    >:: fun _ -> assert_raises Empty (fun () -> Command.parse "") );
-    ( "Assertion TEST 3: Assert Command raises Empty for command with \
+      Empty "";
+    assertion_test
+      "Assertion TEST 3: Assert Command raises Empty for command with \
        spaces"
-    >:: fun _ ->
-      assert_raises Empty (fun () ->
-          Command.parse "                     ") );
-    ( "Assertion TEST 4: Assert quit raises Malformed for including \
+      Empty "                     ";
+    assertion_test
+      "Assertion TEST 4: Assert quit raises Malformed for including \
        extra things"
-    >:: fun _ ->
-      assert_raises Malformed (fun () -> Command.parse "quit hello yes")
-    );
-    ( "Assertion TEST 5: Assert add raises Empty for not including any \
+      Malformed "quit hello yes";
+    assertion_test
+      "Assertion TEST 5: Assert add raises Empty for not including any \
        phrase"
-    >:: fun _ -> assert_raises Empty (fun () -> Command.parse "add") );
-    ( "Assertion TEST 6: Assert add raises Empty for not including any \
+      Empty "add";
+    assertion_test
+      "Assertion TEST 6: Assert add raises Empty for not including any \
        phrase with a period"
-    >:: fun _ -> assert_raises Empty (fun () -> Command.parse "add .")
-    );
+      Empty "add .";
     ( "Assertion TEST 7: Assert get phrase raises Invalid for using \
        complete"
     >:: fun _ ->
@@ -117,10 +212,10 @@ let assertion_tests =
     >:: fun _ ->
       assert_raises Invalid (fun () ->
           "clear" |> Command.parse |> Command.get_phrase) );
-    ( "Assertion TEST 10: Assert get phrase raises Malformed for clear \
-       with extra stuff"
-    >:: fun _ ->
-      assert_raises Malformed (fun () -> Command.parse "clear stuff") );
+    assertion_test
+      "Assertion TEST 10: Assert raises Malformed for clear with extra \
+       stuff"
+      Malformed "clear stuff";
   ]
 
 let suite =
@@ -130,5 +225,10 @@ let suite =
       parse_complete_tests;
       parse_quit_test;
       get_phrase_tests;
+      parse_settings_test;
       assertion_tests;
+      toggle_command_tests;
+      assertion_sets_tests;
+      parsing_date_tests;
+      parse_exit_test;
     ]

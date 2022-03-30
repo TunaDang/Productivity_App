@@ -3,7 +3,7 @@ open TodoList
 open Tasks
 open Date
 
-let sample_tasks = Tasks.from_file "test/data/sample.json"
+let sample_tasks = Tasks.from_file "test/data/sample_tasks.json"
 
 (**[create_date_helper date_opt] extracts the date from a date option*)
 let create_date_helper (date_opt : Date.t option) : Date.t =
@@ -37,7 +37,7 @@ let task_date_test
     (expected : string) : test =
   name >:: fun _ ->
   assert_equal expected
-    (Tasks.task_date input_t input_int)
+    (Tasks.task_date_str input_t input_int)
     ~printer:String.escaped
 
 let completed_test
@@ -92,28 +92,65 @@ let add_test
     |> Tasks.task_names)
     ~printer:(String.concat " ")
 
-let tasks_tests =
+let task_names_tests =
   [
     task_names_test "sample tasks test" sample_tasks
       [ "Buy Milk"; "A3"; "Get that bread" ];
+  ]
+
+let task_name_tests =
+  [
     task_name_test "get 1st task name from sample tasks" sample_tasks 0
       "Buy Milk";
     task_name_test "get 3rd task name from sample tasks" sample_tasks 2
       "Get that bread";
+  ]
+
+let task_date_tests =
+  [
     task_date_test "get 2nd task date from sample tasks" sample_tasks 1
       "3/23";
+  ]
+
+let completed_tests =
+  [
     completed_test "get 1st task completed status from sample tasks"
       sample_tasks 0 true;
-    tasks_amount_test "sample tasks amount" sample_tasks 3;
+  ]
+
+let tasks_amount_tests =
+  [ tasks_amount_test "sample tasks amount" sample_tasks 3 ]
+
+let complete_tests =
+  [
     complete_test "complete 2nd task from sample tasks" sample_tasks 1
       true;
     ( "Already Complete task" >:: fun _ ->
       assert_raises (AlreadyComplete 0) (fun () ->
           Tasks.complete sample_tasks 0) );
-    add_test "Add new task" sample_tasks "Finish testing" "3/25"
-      [ "Buy Milk"; "A3"; "Finish testing"; "Get that bread" ];
+  ]
+
+let task_dates_tests =
+  [
     task_dates_test "sample data dates" sample_tasks
       [ "3/15"; "3/23"; "4/20" ];
   ]
 
-let suite = tasks_tests
+let add_tests =
+  [
+    add_test "Add new task" sample_tasks "Finish testing" "3/25"
+      [ "Buy Milk"; "A3"; "Finish testing"; "Get that bread" ];
+  ]
+
+let suite =
+  List.flatten
+    [
+      task_names_tests;
+      task_name_tests;
+      task_date_tests;
+      completed_tests;
+      tasks_amount_tests;
+      complete_tests;
+      task_dates_tests;
+      add_tests;
+    ]

@@ -1,36 +1,45 @@
 open Yojson.Basic.Util
 open Date
 
-exception InvalidOption
+exception InvalidDate of (int * int)
 exception ElementOutofBounds of int
 
 type t = {
   display_completed : bool;
-  items_due_before : Date.t;
+  due_before : Date.t option;
 }
 (* unimplemented color_palate : Color *)
 
-let setting_of_json json = ()
-(* unimplemented { name = json |> member "name" |> to_string; due_date =
-   json |> member "due_date" |> to_string |> create_date; completed =
-   json |> member "completed" |> to_bool; } *)
+let setting_of_json json =
+  let str = json |> member "due_before" |> Yojson.Basic.to_string in
+  {
+    display_completed = json |> member "display_completed" |> to_bool;
+    due_before = create_date (String.sub str 1 (String.length str - 2));
+  }
 
-let from_file file = ()
-(* let json = Yojson.Basic.from_file file in json |> to_list |> List.map
-   setting_of_json *)
+let from_file file = Yojson.Basic.from_file file |> setting_of_json
 
-let format tsk = ()
-(* let { name; due_date; completed } = tsk in `Assoc [ ("name", `String
-   name); ( "due_date", match due_date with | None -> `String "" | Some
-   date -> `String (Date.to_string date) ); ("completed", `Bool
-   completed); ] *)
+let format tsk =
+  let { display_completed; due_before } = tsk in
+  `Assoc
+    [
+      ("display_completed", `Bool display_completed);
+      ( "due_before",
+        match due_before with
+        | None -> `String ""
+        | Some date -> `String (Date.to_string date) );
+    ]
 
-let to_file file sets = ()
-(* Yojson.Basic.to_file file (`List (List.map format sets)) *)
+let to_file file sets = Yojson.Basic.to_file file (format sets)
+let rec settings sets = [ "display_completed"; "due_before" ]
+let setting sets n = List.nth (settings sets) n
 
-let rec settings sets = ()
-(* match sets with | [] -> [] | { name; due_date; completed } :: t ->
-   name :: setting_names t *)
+let set_display_completed sets b =
+  { display_completed = b; due_before = sets.due_before }
 
-let setting sets n = ()
-(* (List.nth sets n).name *)
+let set_due_before sets d =
+  { display_completed = sets.display_completed; due_before = d }
+
+let get_display_completed sets = sets.display_completed
+let get_due_before sets = sets.due_before
+let toggle sets n = n = 0

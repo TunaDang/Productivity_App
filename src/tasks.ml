@@ -1,7 +1,7 @@
 open Date
 open Yojson.Basic.Util
 
-exception InvalidDate of (int * int)
+exception InvalidDate
 exception AlreadyComplete of int
 exception ElementOutofBounds of int
 
@@ -48,16 +48,17 @@ let rec task_names tsks =
 
 let task_name tsks n = (List.nth tsks n).name
 
-let task_date tsks n =
+let task_date_str tsks n =
   match (List.nth tsks n).due_date with
   | None -> ""
   | Some date -> Date.to_string date
 
+let task_date_opt tsks n = (List.nth tsks n).due_date
 let completed tsks n = (List.nth tsks n).completed
 let tasks_amount tsks = List.length tsks
 
-(**[rec update_tasks tsks n] equals tasks [tsks] with the [n]th
-   element's completed field being true*)
+(*[rec update_tasks tsks n] equals [tsks] with the [n]th element's
+  completed field being true*)
 let rec complete_task_aux tsks n =
   let old_tsk = List.nth tsks n in
   let new_task =
@@ -75,10 +76,11 @@ let complete tsks n =
     else complete_task_aux tsks n
   with Failure x -> raise (ElementOutofBounds n)
 
-(**Extracts date from date option*)
-let extract_date_helper (date_opt : Date.t option) : Date.t =
+(*[extract_date_helper date_opt] xxtracts date from date option
+  [date_opt]*)
+let extract_date_helper date_opt : Date.t =
   match date_opt with
-  | None -> failwith "Invalid input"
+  | None -> raise InvalidDate
   | Some date -> date
 
 let rec add tsks tsk_name date =
@@ -105,7 +107,8 @@ let rec add tsks tsk_name date =
         then new_task :: h :: t
         else h :: add t tsk_name date
 
-(** extract date from date option and converts to stign format*)
+(* [date_opt_to_str d_opt] extract date from date option, [date_opt] and
+   converts to string format*)
 let date_opt_to_str date_opt =
   match date_opt with
   | None -> ""
@@ -116,3 +119,25 @@ let rec task_dates tsks =
   | [] -> []
   | { name; due_date; completed } :: t ->
       (due_date |> date_opt_to_str) :: task_dates t
+
+let filter filter_function tsks = List.filter filter_function tsks
+
+let still_on_time task due_before =
+  try Date.compare (extract_date_helper task.due_date) due_before <= 0
+  with InvalidDate -> true
+
+let tasks_filter tsks completed due_before =
+  match (completed, due_before) with
+  | false, Some date ->
+      filter
+        (fun task -> (not task.completed) && still_on_time task date)
+        tsks
+  | true, Some date -> filter (fun task -> still_on_time task date) tsks
+  | false, None -> filter (fun task -> not task.completed) tsks
+  | true, None -> tsks
+
+let tasks_names_with_filter tsks completed due_before =
+  tasks_filter tsks completed due_before |> task_names
+
+let tasks_dates_with_filter tsks completed due_before =
+  tasks_filter tsks completed due_before |> task_dates
