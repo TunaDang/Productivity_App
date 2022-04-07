@@ -56,18 +56,12 @@ let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
   | Exit -> pack_state st.current_tasks st.current_settings Main
 
 let get_task_names (state : t) =
-  let completed =
-    Settings.get_display_completed state.current_settings
-  in
-  let due_before = Settings.get_due_before state.current_settings in
-  Tasks.tasks_names_with_filter state.current_tasks completed due_before
+  Tasks.tasks_names_with_filter state.current_tasks
+    state.current_settings
 
 let get_dates (state : t) =
-  let completed =
-    Settings.get_display_completed state.current_settings
-  in
-  let due_before = Settings.get_due_before state.current_settings in
-  Tasks.tasks_dates_with_filter state.current_tasks completed due_before
+  Tasks.tasks_dates_with_filter state.current_tasks
+    state.current_settings
 
 let get_tasks state =
   let completed =
