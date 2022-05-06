@@ -13,13 +13,13 @@ let create_date_helper (date_opt : Date.t option) : Date.t =
   | None -> failwith "Invalid input"
   | Some date -> date
 
+(*BEGIN HELPER FUNCTIONS*)
 let create_date_test (name : string) (str : string) (expected : string)
     : test =
   name >:: fun _ ->
   assert_equal expected
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
     ~printer:String.escaped
-
 
 let abbrv_name_test (name : string) (str : string) (expected : string) :
     test =
@@ -56,6 +56,52 @@ let to_string_test (name : string) (d1 : string) (expected : string) =
   assert_equal expected
     (to_string (d1 |> Date.create_date |> create_date_helper))
 
+let incr_day_test (name : string) (d : string) (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected
+    (d |> Date.create_date |> create_date_helper |> Date.incr_day
+   |> Date.to_string)
+
+let incr_month_test (name : string) (d : string) (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected
+    (d |> Date.create_date |> create_date_helper |> Date.incr_month
+   |> Date.to_string)
+
+let incr_week_test (name : string) (d : string) (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected
+    (d |> Date.create_date |> create_date_helper |> Date.incr_week
+   |> Date.to_string)
+(*END HELPER FUNCTIONS*)
+
+let incr_day_tests =
+  [
+    incr_day_test "basic test" "2/2" "2/3";
+    incr_day_test "new month" "1/31" "2/1";
+    incr_day_test "new month feb" "2/28" "3/1";
+    incr_day_test "new year" "12/31" "1/1";
+    incr_day_test "new month for 30 days" "4/30" "5/1";
+  ]
+
+let incr_month_tests =
+  [
+    incr_month_test "basic test" "1/4" "2/4";
+    incr_month_test "new year" "12/31" "1/31";
+    incr_month_test "more days than next month feb" "1/30" "2/28";
+    incr_month_test "more days than next month" "3/31" "4/30";
+    incr_month_test "simple test" "5/4" "6/4";
+    incr_month_test "to december" "11/30" "12/30";
+  ]
+
+let incr_week_tests =
+  [
+    incr_week_test "basic test" "" "";
+    incr_week_test "" "" "";
+    incr_week_test "" "" "";
+    incr_week_test "" "" "";
+    incr_week_test "" "" "";
+  ]
 
 let create_date_tests =
   [
@@ -118,4 +164,7 @@ let suite =
       abbrv_name_tests;
       compare_tests;
       to_string_tests;
+      incr_day_tests;
+      incr_month_tests;
+      incr_week_tests;
     ]
