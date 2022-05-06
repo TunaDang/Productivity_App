@@ -73,6 +73,7 @@ let incr_week_test (name : string) (d : string) (expected : string) =
   assert_equal expected
     (d |> Date.create_date |> create_date_helper |> Date.incr_week
    |> Date.to_string)
+    ~printer:String.escaped
 (*END HELPER FUNCTIONS*)
 
 let incr_day_tests =
@@ -96,11 +97,14 @@ let incr_month_tests =
 
 let incr_week_tests =
   [
-    incr_week_test "basic test" "" "";
-    incr_week_test "" "" "";
-    incr_week_test "" "" "";
-    incr_week_test "" "" "";
-    incr_week_test "" "" "";
+    incr_week_test "basic test" "2/2" "2/9";
+    incr_week_test "new month feb" "2/28" "3/7";
+    incr_week_test "new month 6 days" "1/30" "2/6";
+    incr_week_test "new month 5 days" "1/29" "2/5";
+    incr_week_test "new month 4 days" "1/28" "2/4";
+    incr_week_test "new month 3 days" "1/27" "2/3";
+    incr_week_test "new month 2 days" "1/26" "2/2";
+    incr_week_test "new month 1 days" "1/25" "2/1";
   ]
 
 let create_date_tests =

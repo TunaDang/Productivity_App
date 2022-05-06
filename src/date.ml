@@ -122,7 +122,7 @@ let incr_week date =
   if new_day > (month |> days) then
     let rem_days = (month |> days) - day in
     let new_date = incr_month date in
-    { new_date with day = rem_days }
+    { new_date with day = 7 - rem_days }
   else { month; day = new_day }
 
 let rec create_date str =
