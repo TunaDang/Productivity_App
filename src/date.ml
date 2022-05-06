@@ -120,7 +120,14 @@ let incr_day date =
   else { month; day = new_day }
 
 (*[incr_week d] is date [d] incremented by 7 days, or 1 week*)
-let incr_week date = failwith "not impl"
+let incr_week date =
+  let day, month = (date.day, date.month) in
+  let new_day = day + 7 in
+  if new_day > (month |> days) then
+    let rem_days = (month |> days) - day in
+    let new_date = incr_month date in
+    { new_date with day = rem_days }
+  else { month; day = new_day }
 
 let rec create_date str =
   let lower_str = String.lowercase_ascii str in
