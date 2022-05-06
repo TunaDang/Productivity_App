@@ -40,6 +40,10 @@ val incr_week : t -> t
 (**[incr_week d] is date [d] incremented by 7 days, or 1 week. Account
    for the next week "leaking" into the next month*)
 
+val incr_x_days : int -> t -> t
+(**[incr_x_days x d] is the date corresponding to [x] days after date
+   [d]*)
+
 val create_date : string -> t option
 (** [create_date str] creates an optional date given a string formatted
     in the form month/day where month is an integer between 1..12 and
@@ -71,8 +75,8 @@ val days_remaining : t -> int
     due date has passed*)
 
 val day_of_week : unit -> string
-(**[day_of_week d] is the current day of the week, corresponding to date.
-   Example: ["Monday"], ["Tuesday"], etc. *)
+(**[day_of_week d] is the current day of the week, corresponding to
+   date. Example: ["Monday"], ["Tuesday"], etc. *)
 
 val next_day_of_week : string -> string
 (** [next_day_of_week s] is the next day in the week after string [s].
