@@ -27,6 +27,10 @@ val set_display_completed : t -> bool -> t
 (** [set_display_complete sets b] is settings [sets] after setting
     [display_completed] to bool [b]*)
 
+val set_week_view : t -> bool -> t
+(** [set_week_view sets b] is settings [sets] after setting
+    [week_view] to bool [b]*)
+
 val set_due_before : t -> Date.t option -> t
 (** [set_due_before sets d] is settings [sets] after setting
     [due_before] to [Date.t option] [d]. Raises: [InvalidDate int * int]

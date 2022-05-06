@@ -6,14 +6,16 @@ exception ElementOutofBounds of int
 
 type t = {
   display_completed : bool;
+  week_view : bool;
   due_before : Date.t option;
 }
-(* unimplemented color_palate : Color *)
+(* unimplemented color_palette : Color *)
 
 let setting_of_json json =
   let str = json |> member "due_before" |> Yojson.Basic.to_string in
   {
     display_completed = json |> member "display_completed" |> to_bool;
+    week_view = json |> member "week_view" |> to_bool;
     due_before = create_date (String.sub str 1 (String.length str - 2));
   }
 
@@ -35,10 +37,25 @@ let rec settings sets = [ "display_completed"; "due_before" ]
 let setting sets n = List.nth (settings sets) n
 
 let set_display_completed sets b =
-  { display_completed = b; due_before = sets.due_before }
+  {
+    display_completed = b;
+    week_view = sets.week_view;
+    due_before = sets.due_before;
+  }
+
+let set_week_view sets b =
+  {
+    display_completed = sets.display_completed;
+    week_view = b;
+    due_before = sets.due_before;
+  }
 
 let set_due_before sets d =
-  { display_completed = sets.display_completed; due_before = d }
+  {
+    display_completed = sets.display_completed;
+    week_view = sets.week_view;
+    due_before = d;
+  }
 
 let get_display_completed sets = sets.display_completed
 let get_due_before sets = sets.due_before
