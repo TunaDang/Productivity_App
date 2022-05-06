@@ -22,8 +22,9 @@ type phrase = string list
     settings. Currently, the supported settings commands are turning a
     setting on or off, and setting the date of a setting.*)
 type setting_t =
-  | Toggle of bool
+  | Completed of bool
   | Date of Date.t option
+  | Printer of Settings.printer
   | SetsHelp
   | Exit
 

@@ -67,12 +67,17 @@ val tasks_filter : t -> bool -> Date.t option -> t
 (** [tasks_filter tsks completed due_before] is the list of tasks
     filtered on given conditions.*)
 
-val tasks_names_with_filter : t -> Settings.t -> string list
+val tasks_names_with_filter : t -> bool -> Date.t option -> string list
 (** [tasks_names_with_filter tsks completed due_before] is the list of
     task names filtered on whether the task is completed or not and
     whether it is due before [due_before].*)
 
-val tasks_dates_with_filter : t -> Settings.t -> string list
+val tasks_dates_with_filter : t -> bool -> Date.t option -> string list
 (** [tasks_dates_with_filter tsks completed due_before] is the list of
     dates of tasks filtered on whether the task is completed or not and
     whether it is due before [due_before].*)
+
+val tasks_on_date : t -> Date.t -> t option
+(** [tasks_on_date tsks date] is the option representing all the tasks
+    in [tsks] that are due on [date], and None ff there's no tasks due
+    on [date] *)

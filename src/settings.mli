@@ -5,6 +5,11 @@ exception InvalidDate of (int * int)
 exception ElementOutofBounds of int
 (** Raised when trying to access an element out of bound *)
 
+type printer =
+  | Week
+  | Tasks
+(** The abstract type of how the tasks should be printed*)
+
 type t
 (** The abstract type of values representing settings. *)
 
@@ -27,6 +32,10 @@ val set_display_completed : t -> bool -> t
 (** [set_display_complete sets b] is settings [sets] after setting
     [display_completed] to bool [b]*)
 
+val set_printer : t -> printer -> t
+(** [set_week_view sets b] is settings [sets] after setting
+    [week_view] to bool [b]*)
+
 val set_due_before : t -> Date.t option -> t
 (** [set_due_before sets d] is settings [sets] after setting
     [due_before] to [Date.t option] [d]. Raises: [InvalidDate int * int]
@@ -36,6 +45,9 @@ val get_display_completed : t -> bool
 (** [get_display_completed sets] will return whether the setting to 
     display completed tasks is on or not.*)
 
+val get_printer : t -> printer
+(** [get_printer sets] will return the printer type of the current setting. *)
+
 val get_due_before : t -> Date.t option
 (** [get_due_before sets] will return whether the value of the setting 
     to display tasks due before a certain date.*)
@@ -43,3 +55,7 @@ val get_due_before : t -> Date.t option
 val toggle : t -> int -> bool
 (** [toggle sets n] returns true if the nth setting in settings [sets] 
     is a toggle, and false otherwise. *)
+
+val is_view : t -> int -> bool 
+(** [is_view sets n] returns true if the nth setting in settings [sets] 
+    is the setting to change the view and false otherwise. *)

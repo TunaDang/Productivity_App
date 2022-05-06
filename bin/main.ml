@@ -47,24 +47,36 @@ let evaluate state command =
 
 let evaluate_settings state command =
   match command with
-  | Command.Toggle _ | Command.Date _ | Command.Exit | Command.SetsHelp
-    ->
+  | Command.Completed _ | Command.Date _ | Command.Exit
+  | Command.SetsHelp | Command.Printer _ ->
       State.update_settings_state state command
+
+let match_printer = function
+  | Settings.Week -> Output.print_week
+  | Settings.Tasks -> Output.print_tasks
 
 let rec repl state file =
   match State.current_page state with
   | Main ->
       let command = get_command () in
       let state = evaluate state command in
+      let print =
+        match_printer
+          (Settings.get_printer (State.current_settings state))
+      in
       State.write_state file state;
       if command = Command.Settings then Output.print_settings state
-      else Output.print_tasks state;
+      else print state;
       repl state file
   | Settings ->
       let sets_command = get_settings_command () in
       let state = evaluate_settings state sets_command in
+      let print =
+        match_printer
+          (Settings.get_printer (State.current_settings state))
+      in
       State.write_state file state;
-      if sets_command = Command.Exit then Output.print_tasks state
+      if sets_command = Command.Exit then print state
       else Output.print_settings state;
       repl state file
 
@@ -94,7 +106,10 @@ let main () =
       in
       (* create new file if none exists*)
       let state = State.pack_state tasks settings State.Main in
-      Output.print_tasks state;
+      (match Settings.get_printer (State.current_settings state) with
+      | Week -> Output.print_week state
+      | Tasks -> Output.print_tasks state);
+
       repl state todo_file
 
 (* Execute the game engine. *)

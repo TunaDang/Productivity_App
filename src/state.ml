@@ -44,7 +44,11 @@ let update_state (st : t) (cmd : Command.t) =
 
 let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
   match settings_cmd with
-  | Toggle on_off ->
+  | Printer printer ->
+      pack_state st.current_tasks
+        (Settings.set_printer st.current_settings printer)
+        Settings
+  | Completed on_off ->
       pack_state st.current_tasks
         (Settings.set_display_completed st.current_settings on_off)
         Settings
@@ -56,12 +60,18 @@ let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
   | Exit -> pack_state st.current_tasks st.current_settings Main
 
 let get_task_names (state : t) =
-  Tasks.tasks_names_with_filter state.current_tasks
-    state.current_settings
+  let completed =
+    Settings.get_display_completed state.current_settings
+  in
+  let due_before = Settings.get_due_before state.current_settings in
+  Tasks.tasks_names_with_filter state.current_tasks completed due_before
 
 let get_dates (state : t) =
-  Tasks.tasks_dates_with_filter state.current_tasks
-    state.current_settings
+  let completed =
+    Settings.get_display_completed state.current_settings
+  in
+  let due_before = Settings.get_due_before state.current_settings in
+  Tasks.tasks_dates_with_filter state.current_tasks completed due_before
 
 let get_tasks state =
   let completed =
@@ -74,4 +84,5 @@ let current_page st = st.current_page
 let current_settings st = st.current_settings
 
 let write_state (file_name : string) (st : t) =
-  Tasks.to_file file_name st.current_tasks
+  Tasks.to_file file_name st.current_tasks;
+  Settings.to_file "data/attributes/settings.json" st.current_settings

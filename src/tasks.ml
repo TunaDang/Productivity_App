@@ -136,12 +136,22 @@ let tasks_filter tsks completed due_before =
   | false, None -> filter (fun task -> not task.completed) tsks
   | true, None -> tsks
 
-let tasks_names_with_filter tsks current_settings =
-  let due_before = Settings.get_due_before current_settings in
-  let completed = Settings.get_display_completed current_settings in
+let tasks_names_with_filter tsks completed due_before =
   tasks_filter tsks completed due_before |> task_names
 
-let tasks_dates_with_filter tsks current_settings =
-  let due_before = Settings.get_due_before current_settings in
-  let completed = Settings.get_display_completed current_settings in
+let tasks_dates_with_filter tsks completed due_before =
   tasks_filter tsks completed due_before |> task_dates
+
+let tasks_on_date tsks date =
+  let date_equal = function
+    | Some d -> (
+        match Date.compare d date with
+        | x when x = 0 -> true
+        | _ -> false)
+    | None -> false
+  in
+  match
+    List.filter (fun { name; due_date; _ } -> date_equal due_date) tsks
+  with
+  | [] -> None
+  | tasks -> Some tasks

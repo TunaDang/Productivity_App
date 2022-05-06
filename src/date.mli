@@ -75,7 +75,7 @@ val days_remaining : t -> int
     due date has passed*)
 
 val day_of_week : unit -> string
-(**[day_of_week d] is the current day of the week, corresponding to
+(**[day_of_week ()] is the current day of the week, corresponding to
    date. Example: ["Monday"], ["Tuesday"], etc. *)
 
 val next_day_of_week : string -> string
