@@ -10,6 +10,12 @@ val ascii_art : string
   printed in the same order as they appear in the list*)
 val print_tasks : State.t -> unit
 
+(*Prints the tasks in a week view of the current week from Monday to
+  Sunday. For example, tasks due on Monday of the week will be printed
+  under Monday. No tasks will be printed if no tasks are due on that day
+  of the current week. *)
+val print_week : State.t -> unit
+
 (*Prints the settings in the current list of the application and their
   current values.*)
 val print_settings : State.t -> unit

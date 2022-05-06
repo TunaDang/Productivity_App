@@ -141,3 +141,17 @@ let tasks_names_with_filter tsks completed due_before =
 
 let tasks_dates_with_filter tsks completed due_before =
   tasks_filter tsks completed due_before |> task_dates
+
+let tasks_on_date tsks date =
+  let date_equal = function
+    | Some d -> (
+        match Date.compare d date with
+        | x when x = 0 -> true
+        | _ -> false)
+    | None -> false
+  in
+  match
+    List.filter (fun { name; due_date; _ } -> date_equal due_date) tsks
+  with
+  | [] -> None
+  | tasks -> Some tasks

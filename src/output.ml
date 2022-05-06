@@ -127,6 +127,38 @@ let print_tasks st =
   print_endline "\n\n\n\n\n";
   set_cursor 1 100
 
+  let format_task_week tasks i =
+    let name = Tasks.task_name tasks i in
+    let complete = Tasks.completed tasks i in
+    let print_i = i + 1 in
+    let star = if complete then "( * )" else "(   )" in
+    let mods = ref (if complete then [ ANSITerminal.Bold ] else []) in
+    let output = Printf.sprintf "%s   %d. %s" star print_i name
+    in
+    (output, complete, !mods)
+  
+let get_week_str tasks = 
+  let today = Date.get_today () in 
+  let days = ["Monday";"Tuesday";"Wednesday"; "Thursday"; "Friday"; "Saturday";"Sunday"]  in 
+  
+
+  
+let print_week st =
+  let open ANSITerminal in
+  let tasks = State.get_tasks st in
+  let length = Tasks.tasks_amount tasks in
+  let formatted_tasks =
+    List.map (format_task_week tasks) (range 0 (length - 1))
+  in
+  ignore (Sys.command "clear");
+  set_cursor 1 1;
+  print_ascii_art ();
+  List.iter
+    (fun (str, com, mods) -> print_string mods (str ^ "\n"))
+    formatted_tasks;
+  print_endline "\n\n\n\n\n";
+  set_cursor 1 100
+
 let print_settings st =
   let open ANSITerminal in
   let length = 2 in
@@ -166,7 +198,9 @@ let help () =
 let help_settings () =
   print_endline
     "Here are some the settings currently supported: \n\
-     * To toggle display completed items on or off, type “toggle on/off”\n\
+     * To toggle display completed items on or off, type show-complete \
+     on/off”\n\
      * To set the due date, type “date ##/##”.\n\
      * To set the due date to None, type “date”\n\
+     * To change the view of the todo-list type printer Week/Tasks\n\
      * To exit the settings menu, type “exit”."

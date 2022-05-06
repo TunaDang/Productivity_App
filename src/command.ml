@@ -80,7 +80,7 @@ let parse_settings str =
     match get_first phrase with
     | "printer" -> (
         match rest with
-        | [ "week" ] -> Printer Settings.Week
+        | [ "Week" ] -> Printer Settings.Week
         | [ "Tasks" ] -> Printer Settings.Tasks
         | _ -> raise Malformed)
     | "show-complete" -> (
