@@ -44,7 +44,11 @@ let update_state (st : t) (cmd : Command.t) =
 
 let update_settings_state (st : t) (settings_cmd : Command.setting_t) =
   match settings_cmd with
-  | Toggle on_off ->
+  | Printer printer ->
+      pack_state st.current_tasks
+        (Settings.set_printer st.current_settings printer)
+        Settings
+  | Completed on_off ->
       pack_state st.current_tasks
         (Settings.set_display_completed st.current_settings on_off)
         Settings

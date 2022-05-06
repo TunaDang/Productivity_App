@@ -1,8 +1,9 @@
 type phrase = string list
 
 type setting_t =
-  | Toggle of bool
+  | Completed of bool
   | Date of Date.t option
+  | Printer of Settings.printer
   | SetsHelp
   | Exit
 
@@ -77,10 +78,15 @@ let parse_settings str =
     let phrase = convert_to_array str in
     let rest = get_rest phrase in
     match get_first phrase with
-    | "toggle" -> (
+    | "printer" -> (
         match rest with
-        | [ "on" ] -> Toggle true
-        | [ "off" ] -> Toggle false
+        | [ "week" ] -> Printer Settings.Week
+        | [ "Tasks" ] -> Printer Settings.Tasks
+        | _ -> raise Malformed)
+    | "show-complete" -> (
+        match rest with
+        | [ "on" ] -> Completed true
+        | [ "off" ] -> Completed false
         | _ -> raise Malformed)
     | "date" -> (
         try

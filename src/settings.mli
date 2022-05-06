@@ -5,6 +5,11 @@ exception InvalidDate of (int * int)
 exception ElementOutofBounds of int
 (** Raised when trying to access an element out of bound *)
 
+type printer =
+  | Week
+  | Tasks
+(** The abstract type of how the tasks should be printed*)
+
 type t
 (** The abstract type of values representing settings. *)
 
@@ -27,7 +32,7 @@ val set_display_completed : t -> bool -> t
 (** [set_display_complete sets b] is settings [sets] after setting
     [display_completed] to bool [b]*)
 
-val set_week_view : t -> bool -> t
+val set_printer : t -> printer -> t
 (** [set_week_view sets b] is settings [sets] after setting
     [week_view] to bool [b]*)
 
@@ -39,6 +44,9 @@ val set_due_before : t -> Date.t option -> t
 val get_display_completed : t -> bool
 (** [get_display_completed sets] will return whether the setting to 
     display completed tasks is on or not.*)
+
+val get_printer : t -> printer
+(** [get_printer sets] will return the printer of the current settings *)
 
 val get_due_before : t -> Date.t option
 (** [get_due_before sets] will return whether the value of the setting 
