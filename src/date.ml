@@ -98,14 +98,58 @@ let valid_date m d =
     raise (InvalidDateFormat (string_of_int m ^ "/" ^ string_of_int d))
   else Some { month = m |> num_to_month; day = d }
 
-let create_date str =
-  let str_lst = str |> String.split_on_char '/' |> trim_str_lst in
-  if str_lst = [] then None
-  else if List.length str_lst != 2 then raise (InvalidDateFormat str)
+(*[incr_month d] is date [d] incremented by 1 month.*)
+let incr_month date =
+  let day, month = (date.day, date.month) in
+  let new_month_num = date |> month_num |> ( + ) 1 in
+  if new_month_num = 13 then { month = January; day }
+  else if new_month_num = 2 && day > 28 then
+    { month = February; day = 28 }
+  else if day = 31 then
+    { month = new_month_num |> num_to_month; day = 30 }
+  else { month = new_month_num |> num_to_month; day }
+
+(*[incr_day d] is date [d] incremented 1 day. Ensures that if
+  incremented to next month, the month updates correspondingly *)
+let incr_day date =
+  let day, month = (date.day, date.month) in
+  let new_day = day + 1 in
+  if new_day > (month |> days) then
+    let new_date = incr_month date in
+    { new_date with day = 1 }
+  else { month; day = new_day }
+
+(*[incr_week d] is date [d] incremented by 7 days, or 1 week*)
+let incr_week date = failwith "not impl"
+
+let rec create_date str =
+  let lower_str = String.lowercase_ascii str in
+  if lower_str = "tomorrow" then Some (get_today () |> incr_day)
+  else if lower_str = "next week" then Some (get_today () |> incr_week)
+  else if lower_str = "next month" then Some (get_today () |> incr_month)
   else
-    let month = int_of_string (List.nth str_lst 0) in
-    let day = int_of_string (List.nth str_lst 1) in
-    valid_date month day
+    let str_lst = str |> String.split_on_char '/' |> trim_str_lst in
+    if str_lst = [] then None
+    else if List.length str_lst != 2 then raise (InvalidDateFormat str)
+    else
+      let month = int_of_string (List.nth str_lst 0) in
+      let day = int_of_string (List.nth str_lst 1) in
+      valid_date month day
+
+(*[get_today] is equal to the current day, formatted as [Date.t]*)
+and get_today () =
+  let open Unix in
+  let time = time () |> localtime in
+  match time with
+  | { tm_mday; tm_mon } ->
+      let current_date =
+        match
+          create_date (Printf.sprintf "%d/%d" (tm_mon + 1) tm_mday)
+        with
+        | Some x -> x
+        | None -> failwith "current date must be a valid date"
+      in
+      current_date
 
 let to_string date =
   string_of_int (month_num date) ^ "/" ^ string_of_int (day date)

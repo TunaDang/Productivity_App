@@ -24,11 +24,13 @@ val compare : t -> t -> int
 val create_date : string -> t option
 (** [create_date str] creates an optional date given a string formatted
     in the form month/day where month is an integer between 1..12 and
-    day is a valid integer within the number of days of the month. If
-    [str] is empty, [None] is returned, else [Some] date is returned
-    Raises: [InvalidDateFormat str] if str is not a string represeting a
-    valid date. Raises [Failure "int_of_string"] if the month or day are
-    not integers.*)
+    day is a valid integer within the number of days of the month. Also
+    creates a relative date for certain keywords: ["tomorrow"],
+    ["next week"], ["next month"]. If [str] is empty, [None] is
+    returned, else [Some] date is returned Raises:
+    [InvalidDateFormat str] if str is not a string represeting a valid
+    date nor relative date. Raises [Failure "int_of_string"] if the
+    month or day are not integers.*)
 
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
