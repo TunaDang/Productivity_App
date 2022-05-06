@@ -17,8 +17,8 @@ type t = {
 
 let to_printer str =
   match str with
-  | "Week" -> Week
-  | "Tasks" -> Tasks
+  | {|"Week"|} -> Week
+  | {|"Tasks"|} -> Tasks
   | _ -> failwith "string must be Week or Tasks"
 
 let setting_of_json json =
@@ -32,8 +32,8 @@ let setting_of_json json =
 
 let from_file file = Yojson.Basic.from_file file |> setting_of_json
 
-let format tsk =
-  let { display_completed; printer; due_before } = tsk in
+let format sets =
+  let { display_completed; printer; due_before } = sets in
   `Assoc
     [
       ("display_completed", `Bool display_completed);
@@ -76,3 +76,4 @@ let get_display_completed sets = sets.display_completed
 let get_printer sets = sets.printer
 let get_due_before sets = sets.due_before
 let toggle sets n = n = 0
+let is_view sets n = n = 1

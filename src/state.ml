@@ -84,4 +84,5 @@ let current_page st = st.current_page
 let current_settings st = st.current_settings
 
 let write_state (file_name : string) (st : t) =
-  Tasks.to_file file_name st.current_tasks
+  Tasks.to_file file_name st.current_tasks;
+  Settings.to_file "data/attributes/settings.json" st.current_settings
