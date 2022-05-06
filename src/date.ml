@@ -196,7 +196,7 @@ let days_remaining date =
       in
       date_diff current_date date
 
-let day_of_week d =
+let day_of_week () =
   let open Unix in
   let t = Unix.localtime (Unix.time ()) in
   match t.tm_yday mod 7 with
