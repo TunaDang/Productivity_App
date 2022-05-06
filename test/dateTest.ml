@@ -85,9 +85,24 @@ let month_num_test (name : string) (d : string) (expected : int) =
   assert_equal expected
     (d |> Date.create_date |> create_date_helper |> Date.month_num)
 
-  
+let next_dy_week_test
+    (name : string)
+    (input : string)
+    (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected (input |> Date.next_day_of_week)
 
 (*END HELPER FUNCTIONS*)
+
+let next_dy_week_tests = [
+  next_dy_week_test "sun." "sunday" "Monday";
+  next_dy_week_test "mon." "monday" "Tuesday";
+  next_dy_week_test "tues." "tuesday" "Wednesday";
+  next_dy_week_test "Wed." "wednesday" "Thursday";
+  next_dy_week_test "thurs." "thursday" "Friday";
+  next_dy_week_test "Fri." "friday" "Saturday";
+  next_dy_week_test "Sat." "saturday" "Sunday";
+]
 
 let abbrv_name_tests =
   [
@@ -216,4 +231,5 @@ let suite =
       incr_month_tests;
       incr_week_tests;
       date_diff_tests;
+      next_dy_week_tests;
     ]
