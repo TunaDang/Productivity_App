@@ -74,7 +74,68 @@ let incr_week_test (name : string) (d : string) (expected : string) =
     (d |> Date.create_date |> create_date_helper |> Date.incr_week
    |> Date.to_string)
     ~printer:String.escaped
+
+let day_test (name : string) (d : string) (expected : int) =
+  name >:: fun _ ->
+  assert_equal expected
+    (d |> Date.create_date |> create_date_helper |> Date.day)
+
+let month_num_test (name : string) (d : string) (expected : int) =
+  name >:: fun _ ->
+  assert_equal expected
+    (d |> Date.create_date |> create_date_helper |> Date.month_num)
+
 (*END HELPER FUNCTIONS*)
+
+let abbrv_name_tests =
+  [
+    abbrv_name_test "January" "1/3" "Jan.";
+    abbrv_name_test "February" "2/3" "Feb.";
+    abbrv_name_test "March" "3/1" "Mar.";
+    abbrv_name_test "April" "4/1" "Apr.";
+    abbrv_name_test "May" "5/1" "May";
+    abbrv_name_test "June" "6/1" "Jun.";
+    abbrv_name_test "July" "7/1" "Jul.";
+    abbrv_name_test "August" "8/1" "Aug.";
+    abbrv_name_test "September" "9/1" "Sep.";
+    abbrv_name_test "October" "10/1" "Oct.";
+    abbrv_name_test "November" "11/1" "Nov.";
+    abbrv_name_test "December" "12/3" "Dec.";
+  ]
+
+let day_tests =
+  [
+    day_test "28th day" "2/28" 28;
+    day_test "25th dayt" "3/25" 25;
+    day_test "22th day" "12/22" 22;
+    day_test "21 day" "10/21" 21;
+    day_test "19th day" "8/19" 19;
+  ]
+
+let month_num_tests =
+  [
+    month_num_test "jan date" "1/1" 1;
+    month_num_test "feb date" "2/3" 2;
+    month_num_test "march date" "3/3" 3;
+    month_num_test "april date" "4/4" 4;
+    month_num_test "may date" "5/5" 5;
+    month_num_test "june date" "6/6" 6;
+    month_num_test "july date" "7/7" 7;
+    month_num_test "august date" "8/8" 8;
+    month_num_test "september date" "9/9" 9;
+    month_num_test "october date" "10/10" 10;
+    month_num_test "nov date" "11/11" 11;
+    month_num_test "dec date" "12/12" 12;
+  ]
+
+let compare_tests =
+  [
+    compare_test "earlier month" "1/1" "2/1" ~-1;
+    compare_test "later month" "3/1" "2/1" 1;
+    compare_test "same date" "3/1" "3/1" 0;
+    compare_test "later day" "3/2" "3/1" 1;
+    compare_test "earlier day" "3/2" "3/3" ~-1;
+  ]
 
 let incr_day_tests =
   [
@@ -124,36 +185,6 @@ let create_date_tests =
           Date.create_date "apple/2") );
   ]
 
-let abbrv_name_tests =
-  [
-    abbrv_name_test "January" "1/3" "Jan.";
-    abbrv_name_test "February" "2/3" "Feb.";
-    abbrv_name_test "March" "3/1" "Mar.";
-    abbrv_name_test "April" "4/1" "Apr.";
-    abbrv_name_test "May" "5/1" "May";
-    abbrv_name_test "June" "6/1" "Jun.";
-    abbrv_name_test "July" "7/1" "Jul.";
-    abbrv_name_test "August" "8/1" "Aug.";
-    abbrv_name_test "September" "9/1" "Sep.";
-    abbrv_name_test "October" "10/1" "Oct.";
-    abbrv_name_test "November" "11/1" "Nov.";
-    abbrv_name_test "December" "12/3" "Dec.";
-  ]
-
-let compare_tests =
-  [
-    compare_test "earlier month" "1/1" "2/1" ~-1;
-    compare_test "later month" "3/1" "2/1" 1;
-    compare_test "same date" "3/1" "3/1" 0;
-    compare_test "later day" "3/2" "3/1" 1;
-    compare_test "earlier day" "3/2" "3/3" ~-1;
-    date_diff_test "same date" "3/2" "3/2" 0;
-    date_diff_test "1st date is later" "3/3" "3/2" ~-1;
-    date_diff_test "same month" "2/2" "2/25" 23;
-    date_diff_test "Different Month" "2/2" "12/12" 313;
-    date_diff_test "1 month apart" "3/25" "4/21" 27;
-  ]
-
 let to_string_tests =
   [
     to_string_test "Basic test Feb 2" "2/12" "2/12";
@@ -161,14 +192,26 @@ let to_string_tests =
     to_string_test "edge test Dec 31" "12/31" "12/31";
   ]
 
+let date_diff_tests =
+  [
+    date_diff_test "same date" "3/2" "3/2" 0;
+    date_diff_test "1st date is later" "3/3" "3/2" ~-1;
+    date_diff_test "same month" "2/2" "2/25" 23;
+    date_diff_test "Different Month" "2/2" "12/12" 313;
+    date_diff_test "1 month apart" "3/25" "4/21" 27;
+  ]
+
 let suite =
   List.flatten
     [
       create_date_tests;
+      day_tests;
+      month_num_tests;
       abbrv_name_tests;
       compare_tests;
       to_string_tests;
       incr_day_tests;
       incr_month_tests;
       incr_week_tests;
+      date_diff_tests;
     ]
