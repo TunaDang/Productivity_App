@@ -3,6 +3,9 @@
 exception InvalidDateFormat of string
 (**Raised if an input string is invalid format*)
 
+exception InvalidDayOfWeek of string
+(**Raised if an input string does not correspond to a day of the week*)
+
 type t
 (** The abstract type of values representing a date *)
 
@@ -66,3 +69,12 @@ val days_remaining : t -> int
 (** [days_remaning date] is the days left between the current time and
     the date provided. Returns 0 if today is the due date and -1 if the
     due date has passed*)
+
+val day_of_week : unit -> string
+(**[day_of_week d] is the current day of the week, corresponding to date.
+   Example: ["Monday"], ["Tuesday"], etc. *)
+
+val next_day_of_week : string -> string
+(** [next_day_of_week s] is the next day in the week after string [s].
+    Rasies: [InvalidDayOfWeek s] if [s] is not a proper day of the week
+    Example: [next_day_of_week "Monday"] = ["Tuesday"]*)

@@ -1,4 +1,5 @@
 exception InvalidDateFormat of string
+exception InvalidDayOfWeek of string
 
 type month =
   | January
@@ -194,3 +195,27 @@ let days_remaining date =
         | None -> failwith "current date must be a valid date"
       in
       date_diff current_date date
+
+let day_of_week d =
+  let open Unix in
+  let t = Unix.localtime (Unix.time ()) in
+  match t.tm_yday mod 7 with
+  | 0 -> "Saturday"
+  | 1 -> "Sunday"
+  | 2 -> "Monday"
+  | 3 -> "Tuesday"
+  | 4 -> "Wednesday"
+  | 5 -> "Thursday"
+  | 6 -> "Friday"
+  | _ -> failwith "Impossible"
+
+let next_day_of_week s =
+  match String.lowercase_ascii s with
+  | "sunday" -> "Monday"
+  | "monday" -> "Tuesday"
+  | "tuesday" -> "Wednesday"
+  | "wednesday" -> "Thursday"
+  | "thursday" -> "Friday"
+  | "friday" -> "Saturday"
+  | "saturday" -> "Sunday"
+  | _ -> raise (InvalidDayOfWeek s)
