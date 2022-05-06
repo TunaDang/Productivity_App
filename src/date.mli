@@ -21,6 +21,20 @@ val compare : t -> t -> int
 (**[compare d1 d2] is -1 if [d1] is calendrically before [d2], 1 if [d1]
    is calendrically after [d2], and 0 if [d1] and [d2] are the same date *)
 
+val incr_month : t -> t
+(**[incr_month d] is date [d] incremented by 1 month. Accounts for going
+   from December to January. Note: if the current day of the current
+   month is greater than the number of days in the next month, the date
+   is set to the last day of the next month Example: Incrementing 1/31
+   by a month would be the date 2/28*)
+
+val incr_day : t -> t
+(**[incr_day d] is date [d] incremented 1 day. Ensures that if
+   incremented to next month, the month updates correspondingly*)
+
+val incr_week : t -> t
+(**[incr_week d] is date [d] incremented by 7 days, or 1 week*)
+
 val create_date : string -> t option
 (** [create_date str] creates an optional date given a string formatted
     in the form month/day where month is an integer between 1..12 and
@@ -31,6 +45,8 @@ val create_date : string -> t option
     [InvalidDateFormat str] if str is not a string represeting a valid
     date nor relative date. Raises [Failure "int_of_string"] if the
     month or day are not integers.*)
+
+val get_today : unit -> t
 
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
