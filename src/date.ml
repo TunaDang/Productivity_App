@@ -98,7 +98,6 @@ let valid_date m d =
     raise (InvalidDateFormat (string_of_int m ^ "/" ^ string_of_int d))
   else Some { month = m |> num_to_month; day = d }
 
-(*[incr_month d] is date [d] incremented by 1 month.*)
 let incr_month date =
   let day, month = (date.day, date.month) in
   let new_month_num = date |> month_num |> ( + ) 1 in
@@ -109,8 +108,6 @@ let incr_month date =
     { month = new_month_num |> num_to_month; day = 30 }
   else { month = new_month_num |> num_to_month; day }
 
-(*[incr_day d] is date [d] incremented 1 day. Ensures that if
-  incremented to next month, the month updates correspondingly *)
 let incr_day date =
   let day, month = (date.day, date.month) in
   let new_day = day + 1 in
@@ -119,7 +116,6 @@ let incr_day date =
     { new_date with day = 1 }
   else { month; day = new_day }
 
-(*[incr_week d] is date [d] incremented by 7 days, or 1 week*)
 let incr_week date =
   let day, month = (date.day, date.month) in
   let new_day = day + 7 in
@@ -143,7 +139,6 @@ let rec create_date str =
       let day = int_of_string (List.nth str_lst 1) in
       valid_date month day
 
-(*[get_today] is equal to the current day, formatted as [Date.t]*)
 and get_today () =
   let open Unix in
   let time = time () |> localtime in

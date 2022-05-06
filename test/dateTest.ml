@@ -20,6 +20,7 @@ let create_date_test (name : string) (str : string) (expected : string)
     (str |> Date.create_date |> create_date_helper |> Date.to_string)
     ~printer:String.escaped
 
+
 let abbrv_name_test (name : string) (str : string) (expected : string) :
     test =
   name >:: fun _ ->
@@ -55,6 +56,7 @@ let to_string_test (name : string) (d1 : string) (expected : string) =
   assert_equal expected
     (to_string (d1 |> Date.create_date |> create_date_helper))
 
+
 let create_date_tests =
   [
     create_date_test "Basic test" "1/2" "1/2";
@@ -75,8 +77,17 @@ let create_date_tests =
 let abbrv_name_tests =
   [
     abbrv_name_test "January" "1/3" "Jan.";
-    abbrv_name_test "December" "12/3" "Dec.";
     abbrv_name_test "February" "2/3" "Feb.";
+    abbrv_name_test "March" "3/1" "Mar.";
+    abbrv_name_test "April" "4/1" "Apr.";
+    abbrv_name_test "May" "5/1" "May";
+    abbrv_name_test "June" "6/1" "Jun.";
+    abbrv_name_test "July" "7/1" "Jul.";
+    abbrv_name_test "August" "8/1" "Aug.";
+    abbrv_name_test "September" "9/1" "Sep.";
+    abbrv_name_test "October" "10/1" "Oct.";
+    abbrv_name_test "November" "11/1" "Nov.";
+    abbrv_name_test "December" "12/3" "Dec.";
   ]
 
 let compare_tests =

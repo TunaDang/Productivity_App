@@ -25,15 +25,17 @@ val incr_month : t -> t
 (**[incr_month d] is date [d] incremented by 1 month. Accounts for going
    from December to January. Note: if the current day of the current
    month is greater than the number of days in the next month, the date
-   is set to the last day of the next month Example: Incrementing 1/31
+   is set to the last day of the next month. Example: Incrementing 1/31
    by a month would be the date 2/28*)
 
 val incr_day : t -> t
 (**[incr_day d] is date [d] incremented 1 day. Ensures that if
-   incremented to next month, the month updates correspondingly*)
+   incremented to next month, the month updates correspondingly.
+   Example: Incrementing 1/31 by a day would be the date 2/1 *)
 
 val incr_week : t -> t
-(**[incr_week d] is date [d] incremented by 7 days, or 1 week*)
+(**[incr_week d] is date [d] incremented by 7 days, or 1 week. Account
+   for the next week "leaking" into the next month*)
 
 val create_date : string -> t option
 (** [create_date str] creates an optional date given a string formatted
@@ -47,6 +49,7 @@ val create_date : string -> t option
     month or day are not integers.*)
 
 val get_today : unit -> t
+(**[get_today ()] is the [Date] corresponding to the current day*)
 
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
