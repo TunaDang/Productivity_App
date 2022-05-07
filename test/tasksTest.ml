@@ -99,6 +99,9 @@ let task_names_tests =
       [ "Buy Milk"; "A3"; "Get that bread" ];
     task_names_test "Grocery tasks test" grocery_tasks
       [ "Oranges"; "Apples"; "Steak" ];
+    task_names_test "Grocery tasks after adding"
+      (Tasks.add grocery_tasks "Pears" None)
+      [ "Oranges"; "Apples"; "Steak"; "Pears" ];
   ]
 
 let task_name_tests =
@@ -140,6 +143,9 @@ let tasks_amount_tests =
   [
     tasks_amount_test "sample tasks amount" sample_tasks 3;
     tasks_amount_test "grocery tasks amount" grocery_tasks 3;
+    tasks_amount_test "Grocery tasks after adding"
+      (Tasks.add grocery_tasks "Pears" None)
+      4;
   ]
 
 let complete_tests =
