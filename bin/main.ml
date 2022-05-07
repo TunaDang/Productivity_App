@@ -106,7 +106,10 @@ let main () =
       in
       (* create new file if none exists*)
       let state = State.pack_state tasks settings State.Main in
-      Output.print_tasks state;
+      (match Settings.get_printer (State.current_settings state) with
+      | Week -> Output.print_week state
+      | Tasks -> Output.print_tasks state);
+
       repl state todo_file
 
 (* Execute the game engine. *)

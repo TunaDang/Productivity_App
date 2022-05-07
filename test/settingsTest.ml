@@ -75,8 +75,7 @@ let get_tests =
       Tasks;
     get_due_before_test "Get the current state of printer"
       sample_settings
-      (Date.create_date
-         (String.sub "3/27" 1 (String.length "3/27" - 2)));
+      (Date.create_date "3/27");
   ]
 
 let toggle_test =

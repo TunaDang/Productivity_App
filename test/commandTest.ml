@@ -69,16 +69,17 @@ let settings_cmd_test
 
 let toggle_command_tests =
   [
-    settings_cmd_test "Toggle TEST 1: Testing turning things on"
-      (Completed true) "toggle on";
-    settings_cmd_test "Toggle TEST 2: Testing turning things off"
-      (Completed false) "toggle off";
+    settings_cmd_test "Show Complete TEST 1: Testing turning things on"
+      (Completed true) "show-complete on";
     settings_cmd_test
-      "Toggle TEST 3: Testing turning things on with spaces"
-      (Completed true) "      toggle        on";
+      "Show Complete  TEST 2: Testing turning things off"
+      (Completed false) "show-complete off";
     settings_cmd_test
-      "Toggle TEST 4: Testing turning things off with spaces"
-      (Completed false) "      toggle        off   ";
+      "Show Complete  TEST 3: Testing turning things on with spaces"
+      (Completed true) "      show-complete        on";
+    settings_cmd_test
+      "Show Complete  TEST 4: Testing turning things off with spaces"
+      (Completed false) "      show-complete        off   ";
   ]
 
 let parsing_date_tests =

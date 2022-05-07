@@ -3,6 +3,9 @@
 exception InvalidDateFormat of string
 (**Raised if an input string is invalid format*)
 
+exception InvalidDayOfWeek of string
+(**Raised if an input string does not correspond to a day of the week*)
+
 type t
 (** The abstract type of values representing a date *)
 
@@ -21,14 +24,39 @@ val compare : t -> t -> int
 (**[compare d1 d2] is -1 if [d1] is calendrically before [d2], 1 if [d1]
    is calendrically after [d2], and 0 if [d1] and [d2] are the same date *)
 
+val incr_month : t -> t
+(**[incr_month d] is date [d] incremented by 1 month. Accounts for going
+   from December to January. Note: if the current day of the current
+   month is greater than the number of days in the next month, the date
+   is set to the last day of the next month. Example: Incrementing 1/31
+   by a month would be the date 2/28*)
+
+val incr_day : t -> t
+(**[incr_day d] is date [d] incremented 1 day. Ensures that if
+   incremented to next month, the month updates correspondingly.
+   Example: Incrementing 1/31 by a day would be the date 2/1 *)
+
+val incr_week : t -> t
+(**[incr_week d] is date [d] incremented by 7 days, or 1 week. Account
+   for the next week "leaking" into the next month*)
+
+val incr_x_days : int -> t -> t
+(**[incr_x_days x d] is the date corresponding to [x] days after date
+   [d]*)
+
 val create_date : string -> t option
 (** [create_date str] creates an optional date given a string formatted
     in the form month/day where month is an integer between 1..12 and
-    day is a valid integer within the number of days of the month. If
-    [str] is empty, [None] is returned, else [Some] date is returned
-    Raises: [InvalidDateFormat str] if str is not a string represeting a
-    valid date. Raises [Failure "int_of_string"] if the month or day are
-    not integers.*)
+    day is a valid integer within the number of days of the month. Also
+    creates a relative date for certain keywords: ["tomorrow"],
+    ["next week"], ["next month"]. If [str] is empty, [None] is
+    returned, else [Some] date is returned Raises:
+    [InvalidDateFormat str] if str is not a string represeting a valid
+    date nor relative date. Raises [Failure "int_of_string"] if the
+    month or day are not integers.*)
+
+val get_today : unit -> t
+(**[get_today ()] is the [Date] corresponding to the current day*)
 
 val to_string : t -> string
 (** [to_string date] converts [date] to a month/day format*)
@@ -45,3 +73,12 @@ val days_remaining : t -> int
 (** [days_remaning date] is the days left between the current time and
     the date provided. Returns 0 if today is the due date and -1 if the
     due date has passed*)
+
+val day_of_week : unit -> string
+(**[day_of_week ()] is the current day of the week, corresponding to
+   date. Example: ["Monday"], ["Tuesday"], etc. *)
+
+val next_day_of_week : string -> string
+(** [next_day_of_week s] is the next day in the week after string [s].
+    Rasies: [InvalidDayOfWeek s] if [s] is not a proper day of the week
+    Example: [next_day_of_week "Monday"] = ["Tuesday"]*)
