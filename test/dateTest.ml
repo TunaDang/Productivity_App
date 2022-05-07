@@ -123,6 +123,19 @@ let incr_x_days_tests =
     incr_x_days_test "8 day ahead" 8 "5/1" "5/9";
     incr_x_days_test "9 day ahead" 9 "5/1" "5/10";
     incr_x_days_test "10 day ahead" 10 "5/1" "5/11";
+    incr_x_days_test "11 day ahead" 11 "5/1" "5/12";
+    incr_x_days_test "12 day ahead" 12 "5/1" "5/13";
+    incr_x_days_test "13 day ahead" 13 "5/1" "5/14";
+    incr_x_days_test "14 day ahead" 14 "5/1" "5/15";
+    incr_x_days_test "15 day ahead" 15 "5/1" "5/16";
+    incr_x_days_test "16 day ahead" 16 "5/1" "5/17";
+    incr_x_days_test "17 day ahead" 17 "5/1" "5/18";
+    incr_x_days_test "18 day ahead" 18 "5/1" "5/19";
+    incr_x_days_test "19 day ahead" 19 "5/1" "5/20";
+    incr_x_days_test "20 day ahead" 20 "5/1" "5/21";
+    incr_x_days_test "21 day ahead" 21 "5/1" "5/22";
+    incr_x_days_test "22 day ahead" 22 "5/1" "5/23";
+    incr_x_days_test "23 day ahead" 23 "5/1" "5/24";
   ]
 
 let next_dy_week_tests =
