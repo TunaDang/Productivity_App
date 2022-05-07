@@ -8,6 +8,25 @@ let parse_test
     (input : string) =
   name >:: fun _ -> assert_equal expected_output (Command.parse input)
 
+let assertion_sets_test (name : string) expected_exception input_command
+    =
+  name >:: fun _ ->
+  assert_raises expected_exception (fun () ->
+      Command.parse_settings input_command)
+
+let assertion_test (name : string) expected_exception input_command =
+  name >:: fun _ ->
+  assert_raises expected_exception (fun () ->
+      Command.parse input_command)
+
+let get_phrase_test
+    (name : string)
+    (expected_output : string)
+    (input : string) =
+  name >:: fun _ ->
+  assert_equal expected_output
+    (input |> Command.parse |> Command.get_phrase)
+
 let parse_add_tests =
   [
     parse_test "Add TEST 1: Parsing the add command"
@@ -67,7 +86,7 @@ let settings_cmd_test
   name >:: fun _ ->
   assert_equal expected_sets_cmd (Command.parse_settings input_sets_cmd)
 
-let toggle_command_tests =
+let show_complete_command_tests =
   [
     settings_cmd_test "Show Complete TEST 1: Testing turning things on"
       (Completed true) "show-complete on";
@@ -80,6 +99,61 @@ let toggle_command_tests =
     settings_cmd_test
       "Show Complete  TEST 4: Testing turning things off with spaces"
       (Completed false) "      show-complete        off   ";
+    assertion_sets_test
+      "Show complete TEST 5: Testing with misspelled argument" Malformed
+      "show-complete hello ";
+    assertion_sets_test
+      "Show complete TEST 6: Testing with misspelled keyword" Malformed
+      "show complete on ";
+    assertion_sets_test
+      "Show complete TEST 7: Testing with misspelled both" Malformed
+      "what is going on ";
+    assertion_sets_test "Show complete TEST 7: Testing with empty space"
+      Empty "     ";
+  ]
+
+let get_settings_help =
+  [
+    settings_cmd_test "Printer TEST 1: Testing normal parsing for week"
+      (Printer Settings.Week) "printer Week";
+    settings_cmd_test "Printer TEST 2: Testing week with spaces in btw"
+      (Printer Settings.Week) "       printer     Week      ";
+    settings_cmd_test
+      "Printer TEST 3: Testing week that's misspelled  in btw"
+      (Printer Settings.Week) "       printer     Week      ";
+    assertion_sets_test
+      "Printer TEST 4: Testing with misspelled printer" Malformed
+      "printer week";
+    assertion_sets_test
+      "Printer TEST 5: Testing with misspelled printer and space in \
+       between"
+      Malformed "     printer        week     ";
+    assertion_sets_test
+      "Printer TEST 6: Testing with misspelled printer keyword between"
+      Malformed "print Week";
+    assertion_sets_test
+      "Printer TEST 7: Testing with just the keyword itself" Malformed
+      "printer";
+    settings_cmd_test "Printer TEST 8: Testing normal parsing for week"
+      (Printer Settings.Tasks) "printer Tasks";
+    settings_cmd_test "Printer TEST 9: Testing week with spaces in btw"
+      (Printer Settings.Tasks) "       printer     Tasks      ";
+    settings_cmd_test
+      "Printer TEST 10: Testing week that's misspelled  in btw"
+      (Printer Settings.Tasks) "       printer     Tasks      ";
+    assertion_sets_test
+      "Printer TEST 11: Testing with misspelled printer" Malformed
+      "printer tasks";
+    assertion_sets_test
+      "Printer TEST 12: Testing with misspelled printer and space in \
+       between"
+      Malformed "     printer        tasks     ";
+    assertion_sets_test
+      "Printer TEST 13: Testing with misspelled printer keyword between"
+      Malformed "print Tasks";
+    assertion_sets_test
+      "Printer TEST 14: Testing with just the keyword itself" Malformed
+      "printer";
   ]
 
 let parsing_date_tests =
@@ -109,26 +183,20 @@ let parse_exit_test =
       "      exit       ";
   ]
 
-let assertion_sets_test (name : string) expected_exception input_command
-    =
-  name >:: fun _ ->
-  assert_raises expected_exception (fun () ->
-      Command.parse_settings input_command)
-
 let assertion_sets_tests =
   [
     assertion_sets_test
       "Settings cmd assertion TEST 1: Just the word toggle will be \
        malformed"
-      Malformed "toggle";
+      Malformed "show-complete";
     assertion_sets_test
       "Settings cmd assertion TEST 2: toggle with other phrases is \
        malformed"
-      Malformed "toggle hello";
+      Malformed "show-complete hello";
     assertion_sets_test
       "Settings cmd assertion TEST 3: toggle with other phrases with \
        spaces is malformed"
-      Malformed "     toggle  what      is going    on";
+      Malformed "     show-complete  what      is going    on";
     assertion_sets_test
       "Settings cmd assertion TEST 4: empty phrase raises empty" Empty
       "";
@@ -143,14 +211,6 @@ let assertion_sets_tests =
        Invalid"
       Malformed " date  1     /3      0      ";
   ]
-
-let get_phrase_test
-    (name : string)
-    (expected_output : string)
-    (input : string) =
-  name >:: fun _ ->
-  assert_equal expected_output
-    (input |> Command.parse |> Command.get_phrase)
 
 let get_phrase_tests =
   [
@@ -169,11 +229,6 @@ let get_phrase_tests =
       "finish my homework"
       "add        finish   my       homework.      3/2";
   ]
-
-let assertion_test (name : string) expected_exception input_command =
-  name >:: fun _ ->
-  assert_raises expected_exception (fun () ->
-      Command.parse input_command)
 
 let assertion_tests =
   [
@@ -228,8 +283,9 @@ let suite =
       get_phrase_tests;
       parse_settings_test;
       assertion_tests;
-      toggle_command_tests;
+      show_complete_command_tests;
       assertion_sets_tests;
       parsing_date_tests;
       parse_exit_test;
+      get_settings_help;
     ]
