@@ -61,6 +61,20 @@ let month_num t =
   | November -> 11
   | December -> 12
 
+let month_to_num = function
+  | January -> 1
+  | February -> 2
+  | March -> 3
+  | April -> 4
+  | May -> 5
+  | June -> 6
+  | July -> 7
+  | August -> 8
+  | September -> 9
+  | October -> 10
+  | November -> 11
+  | December -> 12
+
 let num_to_month = function
   | 1 -> January
   | 2 -> February
@@ -126,11 +140,41 @@ let incr_week date =
     { new_date with day = 7 - rem_days }
   else { month; day = new_day }
 
+(* [prop_month_day m d] is the [(month,day)] corresponding to the
+   proper[(month,day)] where [month] has [day] days *)
+let rec prop_month_day curr_month day =
+  match day > days curr_month with
+  | true ->
+      let next_mon = curr_month |> month_to_num |> ( + ) 1 in
+      if next_mon > 12 then
+        prop_month_day January (day - days curr_month)
+      else
+        prop_month_day (next_mon |> num_to_month) (day - days curr_month)
+  | false -> (curr_month, day)
+
+let incr_x_days x date =
+  let day, month = (date.day, date.month) in
+  let new_day = day + x in
+  if new_day > (month |> days) then
+    let rem_days = (month |> days) - day in
+    let new_date = incr_month date in
+    let updated_day = x - rem_days in
+    if updated_day > days new_date.month then
+      let upmonth, upday = prop_month_day new_date.month updated_day in
+      { month = upmonth; day = upday }
+    else { new_date with day = updated_day }
+  else { month; day = new_day }
+
 let rec create_date str =
+  let lst_space = str |> String.split_on_char ' ' |> trim_str_lst in
   let lower_str = String.lowercase_ascii str in
   if lower_str = "tomorrow" then Some (get_today () |> incr_day)
   else if lower_str = "next week" then Some (get_today () |> incr_week)
   else if lower_str = "next month" then Some (get_today () |> incr_month)
+  else if List.length lst_space = 2 then
+    Some
+      (get_today ()
+      |> incr_x_days (int_of_string (List.nth lst_space 0)))
   else
     let str_lst = str |> String.split_on_char '/' |> trim_str_lst in
     if str_lst = [] then None

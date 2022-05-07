@@ -92,6 +92,16 @@ let next_dy_week_test
   name >:: fun _ ->
   assert_equal expected (input |> Date.next_day_of_week)
 
+let incr_x_days_test
+    (name : string)
+    (x : int)
+    (input : string)
+    (expected : string) =
+  name >:: fun _ ->
+  assert_equal expected
+    (Date.incr_x_days x (input |> Date.create_date |> create_date_helper)
+    |> Date.to_string)
+
 (*END HELPER FUNCTIONS*)
 
 let next_dy_week_tests =
