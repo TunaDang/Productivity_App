@@ -112,7 +112,7 @@ let show_complete_command_tests =
       Empty "     ";
   ]
 
-let get_settings_help =
+let get_settings_attributes =
   [
     settings_cmd_test "Printer TEST 1: Testing normal parsing for week"
       (Printer Settings.Week) "printer Week";
@@ -174,6 +174,13 @@ let parsing_date_tests =
       "   date         ";
   ]
 
+let settings_help_test =
+  [
+    settings_cmd_test
+      "settings help TEST 1: Testing getting settings help" SetsHelp
+      "help";
+  ]
+
 let parse_exit_test =
   [
     settings_cmd_test "Exit TEST 1: Parsing the exit command" Exit
@@ -181,6 +188,9 @@ let parse_exit_test =
     settings_cmd_test
       "Exit TEST 2: Parsing the exit command with spaces" Exit
       "      exit       ";
+    assertion_sets_test "Exit TEST 3: Testing with misspelled keyword"
+      Malformed " exitt";
+    assertion_sets_test "Exit TEST 4: Empty for exit" Empty "     ";
   ]
 
 let assertion_sets_tests =
@@ -287,5 +297,5 @@ let suite =
       assertion_sets_tests;
       parsing_date_tests;
       parse_exit_test;
-      get_settings_help;
+      get_settings_attributes;
     ]
