@@ -169,6 +169,7 @@ let rec create_date str =
   let lst_space = str |> String.split_on_char ' ' |> trim_str_lst in
   let lower_str = String.lowercase_ascii str in
   if lower_str = "tomorrow" then Some (get_today () |> incr_day)
+  else if lower_str = "today" then Some (get_today ())
   else if lower_str = "next week" then Some (get_today () |> incr_week)
   else if lower_str = "next month" then Some (get_today () |> incr_month)
   else if List.length lst_space = 2 then

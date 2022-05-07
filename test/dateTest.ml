@@ -104,6 +104,17 @@ let incr_x_days_test
 
 (*END HELPER FUNCTIONS*)
 
+let incr_x_days_tests =
+  [
+    incr_x_days_test "basic test" 5 "5/5" "5/10";
+    incr_x_days_test "test feb" 5 "2/5" "2/10";
+    incr_x_days_test "feb edge case" 23 "2/5" "2/28";
+    incr_x_days_test "feb next month" 24 "2/5" "3/1";
+    incr_x_days_test "next month" 26 "5/6" "6/1";
+    incr_x_days_test "2 months ahead" 56 "5/6" "7/1";
+    incr_x_days_test "3 months ahead" 87 "5/6" "8/1";
+  ]
+
 let next_dy_week_tests =
   [
     next_dy_week_test "sun." "sunday" "Monday";
@@ -137,7 +148,7 @@ let day_tests =
     day_test "25th dayt" "3/25" 25;
     day_test "22th day" "12/22" 22;
     day_test "21 day" "10/21" 21;
-    day_test "19th day" "8/19" 19;
+    day_test "12th day" "7/12" 12;
   ]
 
 let month_num_tests =
@@ -218,6 +229,7 @@ let to_string_tests =
     to_string_test "Basic test Feb 2" "2/12" "2/12";
     to_string_test "edge test Jan 11" "1/1" "1/1";
     to_string_test "edge test Dec 31" "12/31" "12/31";
+    to_string_test "edge test feb 28" "2/28" "2/28";
   ]
 
 let date_diff_tests =
@@ -243,4 +255,5 @@ let suite =
       incr_week_tests;
       date_diff_tests;
       next_dy_week_tests;
+      incr_x_days_tests;
     ]
