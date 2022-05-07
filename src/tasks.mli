@@ -7,6 +7,8 @@ exception AlreadyComplete of int
 (** Raised when trying to "complete" a completed task*)
 
 exception ElementOutofBounds of int
+(** Raised when trying to access a task item number that is greater/less
+    than the number of tasks in the list*)
 
 type t
 (** The abstract type of values representing tasks. *)
