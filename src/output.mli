@@ -1,24 +1,23 @@
-(* This module is responsible for outputting the current state of the
-   task list to the user*)
-
-(* Currently the only supported printing is one task per line*)
+(** This module is responsible for outputting the current state of the
+    task list to the user in a variety of formats*)
 
 val ascii_art : string
-(** *)
+(** This is the string that prints out the name of the application in
+    nice ascii art*)
 
-(*Prints the tasks in the current list of the application. Tasks are
-  printed in the same order as they appear in the list*)
 val print_tasks : State.t -> unit
+(**Prints the tasks in the current list of the application. Tasks are
+   printed in the same order as they appear in the list*)
 
-(*Prints the tasks in a week view of the current week from Monday to
-  Sunday. For example, tasks due on Monday of the week will be printed
-  under Monday. No tasks will be printed if no tasks are due on that day
-  of the current week. *)
 val print_week : State.t -> unit
+(**Prints the tasks in a week view of the current week from Monday to
+   Sunday. For example, tasks due on Monday of the week will be printed
+   under Monday. No tasks will be printed if no tasks are due on that
+   day of the current week. *)
 
-(*Prints the settings in the current list of the application and their
-  current values.*)
 val print_settings : State.t -> unit
+(**Prints the settings in the current list of the application and their
+   current values.*)
 
 val input : unit -> unit
 (** prints the input character: '>' *)
