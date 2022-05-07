@@ -26,5 +26,5 @@ clean:
 	dune clean
 	rm -f todoList.zip
 
-doc:
+docs:
 	dune build @doc
