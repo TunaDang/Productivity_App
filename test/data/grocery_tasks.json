@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Oranges",
+    "due_date": "3/15",
+    "completed": false
+  },
+  {
+    "name": "Apples",
+    "due_date": "4/16",
+    "completed": false
+  },
+  {
+    "name": "Steak",
+    "due_date": "9/21",
+    "completed": true
+  }
+]
