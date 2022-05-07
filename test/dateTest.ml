@@ -113,6 +113,16 @@ let incr_x_days_tests =
     incr_x_days_test "next month" 26 "5/6" "6/1";
     incr_x_days_test "2 months ahead" 56 "5/6" "7/1";
     incr_x_days_test "3 months ahead" 87 "5/6" "8/1";
+    incr_x_days_test "1 day ahead" 1 "5/1" "5/2";
+    incr_x_days_test "2 day ahead" 2 "5/1" "5/3";
+    incr_x_days_test "3 day ahead" 3 "5/1" "5/4";
+    incr_x_days_test "4 day ahead" 4 "5/1" "5/5";
+    incr_x_days_test "5 day ahead" 5 "5/1" "5/6";
+    incr_x_days_test "6 day ahead" 6 "5/1" "5/7";
+    incr_x_days_test "7 day ahead" 7 "5/1" "5/8";
+    incr_x_days_test "8 day ahead" 8 "5/1" "5/9";
+    incr_x_days_test "9 day ahead" 9 "5/1" "5/10";
+    incr_x_days_test "10 day ahead" 10 "5/1" "5/11";
   ]
 
 let next_dy_week_tests =
@@ -144,11 +154,38 @@ let abbrv_name_tests =
 
 let day_tests =
   [
-    day_test "28th day" "2/28" 28;
-    day_test "25th dayt" "3/25" 25;
-    day_test "22th day" "12/22" 22;
-    day_test "21 day" "10/21" 21;
-    day_test "12th day" "7/12" 12;
+    day_test "28th day fev" "2/28" 28;
+    day_test "1 day" "1/1" 1;
+    day_test "2 day" "1/2" 2;
+    day_test "3 day" "1/3" 3;
+    day_test "4 day" "1/4" 4;
+    day_test "5 day" "1/5" 5;
+    day_test "6 day" "1/6" 6;
+    day_test "7 day" "1/7" 7;
+    day_test "8 day" "1/8" 8;
+    day_test "9 day" "1/9" 9;
+    day_test "10 day" "1/10" 10;
+    day_test "11 day" "1/11" 11;
+    day_test "12 day" "1/12" 12;
+    day_test "13 day" "1/13" 13;
+    day_test "14 day" "1/14" 14;
+    day_test "15 day" "1/15" 15;
+    day_test "16 day" "1/16" 16;
+    day_test "17 day" "1/17" 17;
+    day_test "18 day" "1/18" 18;
+    day_test "19 day" "1/19" 19;
+    day_test "20 day" "1/20" 20;
+    day_test "21 day" "1/21" 21;
+    day_test "22 day" "1/22" 22;
+    day_test "23 day" "1/23" 23;
+    day_test "24 day" "1/24" 24;
+    day_test "25 day" "1/25" 25;
+    day_test "26 day" "1/26" 26;
+    day_test "27 day" "1/27" 27;
+    day_test "28 day" "1/28" 28;
+    day_test "29 day" "1/29" 29;
+    day_test "30 day" "1/30" 30;
+    day_test "31 day" "1/31" 31;
   ]
 
 let month_num_tests =
@@ -172,6 +209,7 @@ let compare_tests =
     compare_test "earlier month" "1/1" "2/1" ~-1;
     compare_test "later month" "3/1" "2/1" 1;
     compare_test "same date" "3/1" "3/1" 0;
+    compare_test "same date feb edge case" "2/28" "2/28" 0;
     compare_test "later day" "3/2" "3/1" 1;
     compare_test "earlier day" "3/2" "3/3" ~-1;
   ]
@@ -183,6 +221,19 @@ let incr_day_tests =
     incr_day_test "new month feb" "2/28" "3/1";
     incr_day_test "new year" "12/31" "1/1";
     incr_day_test "new month for 30 days" "4/30" "5/1";
+    incr_day_test "jan to feb" "1/31" "2/1";
+    incr_day_test "feb to march" "2/28" "3/1";
+    incr_day_test "mar to apr" "3/31" "4/1";
+    incr_day_test "apr to may" "4/30" "5/1";
+    incr_day_test "may to jun" "5/31" "6/1";
+    incr_day_test "jun to jul" "6/30" "7/1";
+    incr_day_test "jul to aug" "7/31" "8/1";
+    incr_day_test "aug to sept" "8/31" "9/1";
+    incr_day_test "sept to oct" "9/30" "10/1";
+    incr_day_test "oct to nov" "10/31" "11/1";
+    incr_day_test "nov to dec" "11/30" "12/1";
+    incr_day_test "dec to jan" "12/31" "1/1";
+
   ]
 
 let incr_month_tests =
@@ -211,8 +262,9 @@ let create_date_tests =
   [
     create_date_test "Basic test" "1/2" "1/2";
     create_date_test "Feb edge" "2/28" "2/28";
-    create_date_test "Jan edge" "3/31" "3/31";
+    create_date_test "march edge" "3/31" "3/31";
     create_date_test "April edge" "4/30" "4/30";
+    create_date_test "Jan edge" "1/1" "1/1";
     ( "InvalidDateFormat day" >:: fun _ ->
       assert_raises (InvalidDateFormat "2/29") (fun () ->
           Date.create_date "2/29") );
@@ -230,6 +282,18 @@ let to_string_tests =
     to_string_test "edge test Jan 11" "1/1" "1/1";
     to_string_test "edge test Dec 31" "12/31" "12/31";
     to_string_test "edge test feb 28" "2/28" "2/28";
+    to_string_test "test jan date" "1/28" "1/28";
+    to_string_test "test feb date" "2/28" "2/28";
+    to_string_test "test march date" "3/28" "3/28";
+    to_string_test "test apr date" "4/28" "4/28";
+    to_string_test "test may date" "5/28" "5/28";
+    to_string_test "test jun date" "6/28" "6/28";
+    to_string_test "test jul date" "7/28" "7/28";
+    to_string_test "test aug date" "8/28" "8/28";
+    to_string_test "test sept date" "9/28" "9/28";
+    to_string_test "test oct date" "10/28" "10/28";
+    to_string_test "test nov date" "11/28" "11/28";
+    to_string_test "test dec date" "12/28" "12/28";
   ]
 
 let date_diff_tests =
