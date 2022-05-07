@@ -94,15 +94,16 @@ let next_dy_week_test
 
 (*END HELPER FUNCTIONS*)
 
-let next_dy_week_tests = [
-  next_dy_week_test "sun." "sunday" "Monday";
-  next_dy_week_test "mon." "monday" "Tuesday";
-  next_dy_week_test "tues." "tuesday" "Wednesday";
-  next_dy_week_test "Wed." "wednesday" "Thursday";
-  next_dy_week_test "thurs." "thursday" "Friday";
-  next_dy_week_test "Fri." "friday" "Saturday";
-  next_dy_week_test "Sat." "saturday" "Sunday";
-]
+let next_dy_week_tests =
+  [
+    next_dy_week_test "sun." "sunday" "Monday";
+    next_dy_week_test "mon." "monday" "Tuesday";
+    next_dy_week_test "tues." "tuesday" "Wednesday";
+    next_dy_week_test "Wed." "wednesday" "Thursday";
+    next_dy_week_test "thurs." "thursday" "Friday";
+    next_dy_week_test "Fri." "friday" "Saturday";
+    next_dy_week_test "Sat." "saturday" "Sunday";
+  ]
 
 let abbrv_name_tests =
   [
