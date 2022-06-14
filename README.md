@@ -1,4 +1,4 @@
-# Productivity Application
+# Todocaml
 A todo list implemented in Ocaml. Cornell CS 3110 final project.
 
 ## Description
